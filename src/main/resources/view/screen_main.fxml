@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<BorderPane
+        maxHeight="-Infinity"
+        maxWidth="-Infinity"
+        minHeight="-Infinity"
+        minWidth="-Infinity"
+        prefHeight="653.0"
+        prefWidth="943.0"
+        fx:controller="main.java.controllers.MainScreen"
+        xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+   <bottom>
+      <ProgressBar prefHeight="34.0" prefWidth="561.0" progress="0.0" BorderPane.alignment="CENTER">
+         <padding>
+            <Insets bottom="30.0" top="30.0" />
+         </padding>
+      </ProgressBar>
+   </bottom>
+   <center>
+      <GridPane BorderPane.alignment="CENTER">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" percentHeight="20.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <GridPane>
+              <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="120.0" minWidth="100.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="120.0" minWidth="100.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <BorderPane prefHeight="200.0" prefWidth="200.0">
+                     <bottom>
+                        <Label text="Dodaj datoteke..." BorderPane.alignment="CENTER" />
+                     </bottom>
+                     <center>
+                        <ImageView accessibleRole="BUTTON" fitHeight="60.0" fitWidth="60.0" BorderPane.alignment="CENTER">
+                           <image>
+                              <Image url="@../images/Add%20files.png" />
+                           </image>
+                        </ImageView>
+                     </center>
+                     <padding>
+                        <Insets bottom="11.0" />
+                     </padding>
+                  </BorderPane>
+                  <BorderPane prefHeight="79.0" prefWidth="129.0" GridPane.columnIndex="1">
+                     <bottom>
+                        <Label text="Dodaj direktorijum..." BorderPane.alignment="CENTER" />
+                     </bottom>
+                     <center>
+                        <ImageView accessibleRole="BUTTON" fitHeight="60.0" fitWidth="60.0" BorderPane.alignment="CENTER">
+                           <image>
+                              <Image url="@../images/Add%20folder.png" />
+                           </image>
+                        </ImageView>
+                     </center>
+                     <padding>
+                        <Insets bottom="11.0" />
+                     </padding>
+                  </BorderPane>
+                  <GridPane GridPane.columnIndex="2">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label text="Odaberite jezik:">
+                           <GridPane.margin>
+                              <Insets left="30.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <RadioButton mnemonicParsing="false" text="Ćirilica" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets left="30.0" />
+                           </GridPane.margin>
+                        </RadioButton>
+                        <RadioButton mnemonicParsing="false" text="Latinica" GridPane.rowIndex="2">
+                           <GridPane.margin>
+                              <Insets left="30.0" />
+                           </GridPane.margin>
+                        </RadioButton>
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <padding>
+                        <Insets bottom="11.0" />
+                     </padding>
+                  </GridPane>
+                  <BorderPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3">
+                     <bottom>
+                        <Label text="Pokreni" BorderPane.alignment="CENTER" />
+                     </bottom>
+                     <center>
+                        <ImageView accessibleRole="BUTTON" fitHeight="60.0" fitWidth="60.0" BorderPane.alignment="CENTER">
+                           <image>
+                              <Image url="@../images/PlayPause.png" />
+                           </image>
+                        </ImageView>
+                     </center>
+                     <padding>
+                        <Insets bottom="11.0" />
+                     </padding>
+                  </BorderPane>
+                  <BorderPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="4">
+                     <bottom>
+                        <Label text="Zaustavi" BorderPane.alignment="CENTER" />
+                     </bottom>
+                     <center>
+                        <ImageView accessibleRole="BUTTON" fitHeight="60.0" fitWidth="60.0" BorderPane.alignment="CENTER">
+                           <image>
+                              <Image url="@../images/Stop.png" />
+                           </image>
+                        </ImageView>
+                     </center>
+                     <padding>
+                        <Insets bottom="11.0" />
+                     </padding>
+                  </BorderPane>
+                  <BorderPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="5">
+                     <top>
+                        <Label text="Konzola:" BorderPane.alignment="CENTER_LEFT" />
+                     </top>
+                     <center>
+                        <TextArea prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                     </center>
+                     <padding>
+                        <Insets bottom="5.0" />
+                     </padding>
+                  </BorderPane>
+               </children>
+               <padding>
+                  <Insets top="10.0" />
+               </padding>
+            </GridPane>
+            <TableView prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+              <columns>
+                <TableColumn prefWidth="200.0" text="Naziv fajla" />
+                <TableColumn prefWidth="200.0" text="Autor" />
+                  <TableColumn prefWidth="200.0" text="Naziv pesme" />
+                  <TableColumn prefWidth="100.0" text="Godina izdanja" />
+              </columns>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </TableView>
+         </children>
+      </GridPane>
+   </center>
+</BorderPane>

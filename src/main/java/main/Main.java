@@ -1,4 +1,4 @@
-package sample;
+package main.java.main;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -10,11 +10,10 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 300, 275));
+        Parent root = FXMLLoader.load(getClass().getResource("../../resources/view/screen_main.fxml"));
+        primaryStage.setTitle("MP3 Tag Generator");
+        primaryStage.setScene(new Scene(root));
         primaryStage.show();
-        // just test
     }
 
 
