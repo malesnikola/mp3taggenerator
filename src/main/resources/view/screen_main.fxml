@@ -11,14 +11,16 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="653.0" prefWidth="943.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controllers.MainScreen">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="653.0" prefWidth="943.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controllers.MainScreenController">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
@@ -75,8 +77,7 @@
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" percentHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
@@ -85,16 +86,19 @@
                               <Insets left="15.0" />
                            </GridPane.margin>
                         </Label>
-                        <RadioButton mnemonicParsing="false" text="Ćirilica" GridPane.rowIndex="1">
+                        <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="1">
+                           <children>
+                              <RadioButton mnemonicParsing="false" text="Ćirilica">
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="lang" />
+                                 </toggleGroup>
+                              </RadioButton>
+                              <RadioButton mnemonicParsing="false" text="Latinica" toggleGroup="$lang" />
+                           </children>
                            <GridPane.margin>
                               <Insets left="15.0" />
                            </GridPane.margin>
-                        </RadioButton>
-                        <RadioButton mnemonicParsing="false" text="Latinica" GridPane.rowIndex="2">
-                           <GridPane.margin>
-                              <Insets left="15.0" />
-                           </GridPane.margin>
-                        </RadioButton>
+                        </VBox>
                      </children>
                      <opaqueInsets>
                         <Insets />
@@ -117,7 +121,7 @@
                         <Insets bottom="5.0" left="15.0" right="5.0" />
                      </padding>
                   </BorderPane>
-                  <Button contentDisplay="TOP" mnemonicParsing="false" prefHeight="50.0" prefWidth="130.0" text="Dodaj datoteke..." GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                  <Button fx:id="openFiles" contentDisplay="TOP" mnemonicParsing="false" onAction="#openFiles" prefHeight="50.0" prefWidth="130.0" text="Dodaj datoteke..." GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                      <graphic>
                         <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                            <image>

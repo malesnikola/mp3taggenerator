@@ -5,12 +5,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import main.java.controllers.MainScreenController;
 
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("../../resources/view/screen_main.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../../resources/view/screen_main.fxml"));
+        Parent root = loader.load();
+        MainScreenController mainScreenController = loader.getController();
+        mainScreenController.init(primaryStage);
+
         primaryStage.setTitle("MP3 Tag Generator");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
