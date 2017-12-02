@@ -158,12 +158,12 @@
                   </Button>
                </children>
             </GridPane>
-            <TableView prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+            <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
               <columns>
-                <TableColumn prefWidth="200.0" text="Naziv fajla" />
-                <TableColumn prefWidth="200.0" text="Autor" />
-                  <TableColumn prefWidth="200.0" text="Naziv pesme" />
-                  <TableColumn prefWidth="100.0" text="Godina izdanja" />
+                <TableColumn fx:id="fileName" prefWidth="200.0" text="Naziv fajla" />
+                <TableColumn fx:id="trackArtist" prefWidth="200.0" text="Autor" />
+                  <TableColumn fx:id="trackName" prefWidth="200.0" text="Naziv pesme" />
+                  <TableColumn fx:id="trackYear" prefWidth="100.0" text="Godina izdanja" />
               </columns>
                <opaqueInsets>
                   <Insets />

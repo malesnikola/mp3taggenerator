@@ -14,7 +14,6 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../../resources/view/screen_main.fxml"));
         Parent root = loader.load();
         MainScreenController mainScreenController = loader.getController();
-        mainScreenController.init(primaryStage);
 
         primaryStage.setTitle("MP3 Tag Generator");
         primaryStage.setScene(new Scene(root));
