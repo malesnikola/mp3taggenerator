@@ -13,12 +13,12 @@ import main.java.domain.Mp3Details;
 import main.java.service.Mp3Service;
 import main.java.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.util.List;
 
-@Controller
+@Component
 public class MainScreenController {
 
     @Autowired
