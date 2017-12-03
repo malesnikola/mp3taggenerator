@@ -34,6 +34,10 @@ public class Mp3Service {
         return isEverythingSuccess;
     }
 
+    public void removeInsertedFiles(List<String> filePath) {
+        filePath.stream().forEach(mp3Repository::removeImportedFile);
+    }
+
     public List<Mp3File> getInsertedFiles() {
         return mp3Repository.getInsertedFiles();
     }

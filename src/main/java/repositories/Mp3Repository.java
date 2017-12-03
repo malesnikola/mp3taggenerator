@@ -16,10 +16,18 @@ public class Mp3Repository {
 
     private Map<String, Mp3File> importedFiles = new HashMap<String, Mp3File>();
 
-    public void importFileIfNotExist(String fileName) throws IOException, UnsupportedTagException, InvalidDataException {
-        if (!importedFiles.containsKey(fileName)) {
-            importedFiles.put(fileName, new Mp3File(fileName));
+    public void importFileIfNotExist(String filePath) throws IOException, UnsupportedTagException, InvalidDataException {
+        if (!importedFiles.containsKey(filePath)) {
+            importedFiles.put(filePath, new Mp3File(filePath));
         }
+    }
+
+    public void removeImportedFile(String filePath) {
+        importedFiles.remove(filePath);
+    }
+
+    public void saveFiles(boolean isCyrillicTags) {
+
     }
 
     public List<Mp3File> getInsertedFiles() {

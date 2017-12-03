@@ -26,7 +26,8 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
+              <MenuItem mnemonicParsing="false" onAction="#openFiles" text="Dodaj datoteke..." />
+                  <MenuItem mnemonicParsing="false" onAction="#openFolder" text="Dodaj direktorijum..." />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">
@@ -88,7 +89,7 @@
                         </Label>
                         <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="1">
                            <children>
-                              <RadioButton mnemonicParsing="false" text="Ćirilica">
+                              <RadioButton mnemonicParsing="false" selected="true" text="Ćirilica">
                                  <toggleGroup>
                                     <ToggleGroup fx:id="lang" />
                                  </toggleGroup>
@@ -129,7 +130,7 @@
                            </image></ImageView>
                      </graphic>
                   </Button>
-                  <Button contentDisplay="TOP" mnemonicParsing="false" prefHeight="50.0" prefWidth="130.0" text="Dodaj direktorijum..." GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                  <Button contentDisplay="TOP" mnemonicParsing="false" onAction="#openFolder" prefHeight="50.0" prefWidth="130.0" text="Dodaj direktorijum..." GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                      <graphic>
                         <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -160,10 +161,10 @@
             </GridPane>
             <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
               <columns>
-                <TableColumn fx:id="fileName" prefWidth="200.0" text="Naziv fajla" />
-                <TableColumn fx:id="trackArtist" prefWidth="200.0" text="Autor" />
-                  <TableColumn fx:id="trackName" prefWidth="200.0" text="Naziv pesme" />
-                  <TableColumn fx:id="trackYear" prefWidth="100.0" text="Godina izdanja" />
+                <TableColumn fx:id="fileName" editable="false" prefWidth="200.0" text="Naziv fajla" />
+                <TableColumn fx:id="trackArtist" editable="false" prefWidth="200.0" text="Autor" />
+                  <TableColumn fx:id="trackName" editable="false" prefWidth="200.0" text="Naziv pesme" />
+                  <TableColumn fx:id="trackYear" editable="false" prefWidth="100.0" text="Godina izdanja" />
               </columns>
                <opaqueInsets>
                   <Insets />
