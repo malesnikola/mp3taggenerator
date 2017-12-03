@@ -5,10 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -31,6 +28,9 @@ public class MainScreenController {
 
     @Autowired
     Mp3Service mp3Service;
+
+    @FXML
+    private RadioButton cyrillicRadioButton;
 
     @FXML
     private TableView<Mp3Details> tableView;
@@ -117,6 +117,11 @@ public class MainScreenController {
 
             insertFiles(filesForImport);
         }
+    }
+
+    public void start() {
+        mp3Service.setTagsForFilesAndSave(cyrillicRadioButton.isSelected());
+        updateTable();
     }
 
     private void updateTable() {

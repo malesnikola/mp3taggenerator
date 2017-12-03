@@ -1,8 +1,6 @@
 package main.java.repositories;
 
-import com.mpatric.mp3agic.InvalidDataException;
-import com.mpatric.mp3agic.Mp3File;
-import com.mpatric.mp3agic.UnsupportedTagException;
+import com.mpatric.mp3agic.*;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
@@ -26,11 +24,11 @@ public class Mp3Repository {
         importedFiles.remove(filePath);
     }
 
-    public void saveFiles(boolean isCyrillicTags) {
-
+    public void saveFile(Mp3File file) throws IOException, NotSupportedException  {
+        file.save(file.getFilename() + "2");
     }
 
-    public List<Mp3File> getInsertedFiles() {
-        return new LinkedList<Mp3File>(importedFiles.values());
+    public Map<String, Mp3File> getImportedFiles() {
+        return importedFiles;
     }
 }
