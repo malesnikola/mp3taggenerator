@@ -25,12 +25,12 @@ public class Mp3Details {
 
     public static Mp3Details deserialize(Mp3File file) {
         String filePath = file.getFilename();
-        String fileName = filePath.substring(filePath.lastIndexOf(File.separator));
-        ID3v1 id3v1Tag = file.getId3v1Tag();
-        if (id3v1Tag != null) {
-            String trackArtist = id3v1Tag.getArtist();
-            String trackName = id3v1Tag.getTrack();
-            String trackYear = id3v1Tag.getYear();
+        String fileName = filePath.substring(filePath.lastIndexOf(File.separator) + 1);
+        ID3v1 id3v2Tag = file.getId3v2Tag();
+        if (id3v2Tag != null) {
+            String trackArtist = id3v2Tag.getArtist();
+            String trackName = id3v2Tag.getTitle();
+            String trackYear = id3v2Tag.getYear();
             return new Mp3Details(filePath, fileName, trackArtist, trackName, trackYear);
         }
 
