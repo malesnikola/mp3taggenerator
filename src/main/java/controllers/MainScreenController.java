@@ -29,7 +29,9 @@ import java.util.stream.Collectors;
 public class MainScreenController implements Mp3Repository.Mp3FilesObserver {
 
     @Autowired
-    Mp3Repository mp3Repository;
+    private Mp3Repository mp3Repository;
+
+    private Scene scene;
 
     @FXML
     private RadioButton cyrillicRadioButton;
@@ -86,6 +88,39 @@ public class MainScreenController implements Mp3Repository.Mp3FilesObserver {
             }
         });
 
+    }
+
+    public void setScene(Scene scene) {
+        this.scene = scene;
+
+        scene.setOnDragOver(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                Dragboard db = event.getDragboard();
+                if (db.hasFiles() && FileHelper.ifContainsAnyMp3File(db.getFiles())) {
+                    event.acceptTransferModes(TransferMode.COPY);
+                } else {
+                    event.consume();
+                }
+            }
+        });
+
+        // Dropping over surface
+        scene.setOnDragDropped(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                Dragboard db = event.getDragboard();
+                boolean success = false;
+                if (db.hasFiles()) {
+                    success = true;
+                    List<File> mp3Files = FileHelper.getAllMp3Files(db.getFiles());
+                    mp3Repository.importFiles(mp3Files);
+                }
+
+                event.setDropCompleted(success);
+                event.consume();
+            }
+        });
     }
 
     public void openFiles() {
