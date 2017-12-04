@@ -3,15 +3,17 @@ package main.java.controllers;
 import com.mpatric.mp3agic.Mp3File;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import main.java.domain.Mp3Details;
+import main.java.repositories.Mp3Repository;
 import main.java.service.Mp3Service;
 import main.java.util.Constants;
 import main.java.util.FileHelper;
@@ -24,10 +26,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class MainScreenController {
+public class MainScreenController implements Mp3Repository.Mp3FilesObserver {
 
     @Autowired
-    Mp3Service mp3Service;
+    Mp3Repository mp3Repository;
 
     @FXML
     private RadioButton cyrillicRadioButton;
@@ -45,15 +47,10 @@ public class MainScreenController {
 
     private ObservableList<Mp3Details> tableData;
 
-    private void insertFiles(List<File> filesForImport) {
-        boolean isSuccess = mp3Service.insertFiles(filesForImport);
-        if (isSuccess) {
-            updateTable();
-        }
-    }
-
     @FXML
     public void initialize() {
+        mp3Repository.registerObserver(this);
+
         tableView.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
         );
@@ -64,8 +61,7 @@ public class MainScreenController {
                 case DELETE:
                     ObservableList<Mp3Details> selectedItems = tableView.getSelectionModel().getSelectedItems();
                     List<String> filePathsForRemove = selectedItems.stream().map(Mp3Details::getFilePath).collect(Collectors.toList());
-                    mp3Service.removeInsertedFiles(filePathsForRemove);
-                    updateTable();
+                    mp3Repository.removeImportedFiles(filePathsForRemove);
                     break;
                 case ESCAPE:
                     tableView.getSelectionModel().clearSelection();
@@ -89,6 +85,7 @@ public class MainScreenController {
                 tableView.getSelectionModel().clearSelection();
             }
         });
+
     }
 
     public void openFiles() {
@@ -99,7 +96,7 @@ public class MainScreenController {
         // Open dialog for choosing mp3 files
         List<File> files = fileChooser.showOpenMultipleDialog(tableView.getScene().getWindow());
         if (files != null) {
-            insertFiles(files);
+            mp3Repository.importFiles(files);
         }
     }
 
@@ -115,19 +112,18 @@ public class MainScreenController {
                 }
             }
 
-            insertFiles(filesForImport);
+            mp3Repository.importFiles(filesForImport);
         }
     }
 
     public void start() {
-        mp3Service.setTagsForFilesAndSave(cyrillicRadioButton.isSelected());
-        updateTable();
+        mp3Repository.generateTagsForImportedFiles(cyrillicRadioButton.isSelected());
+        mp3Repository.saveImportedFiles();
     }
 
     private void updateTable() {
         tableData = FXCollections.observableArrayList();
-        List<Mp3File> importedFiles = mp3Service.getInsertedFiles();
-        for (Mp3File mp3File : importedFiles) {
+        for (Mp3File mp3File : mp3Repository.getImportedFiles().values()) {
             tableData.add(Mp3Details.deserialize(mp3File));
         }
 
@@ -143,5 +139,22 @@ public class MainScreenController {
         fileName.setSortType(TableColumn.SortType.ASCENDING);
         tableView.getSortOrder().add(fileName);
         tableView.sort();
+    }
+
+    @Override
+    public void onImportedFilesChanged() {
+        System.out.println("On imported files changed");
+        updateTable();
+    }
+
+    @Override
+    public void onSavedImportedFiles() {
+        System.out.println("On saved imported files");
+        updateTable();
+    }
+
+    @Override
+    public void onTagGenerated() {
+        System.out.println("On tag generated");
     }
 }

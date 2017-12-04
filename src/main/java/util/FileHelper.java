@@ -2,11 +2,18 @@ package main.java.util;
 
 import com.mpatric.mp3agic.*;
 import main.java.exceptions.FileNameBadFormatException;
+import main.java.service.Mp3Service;
+import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class FileHelper {
+
+    private static Logger logger = Logger.getLogger(FileHelper.class);
 
     @NotNull
     private static String translate(String message) {
@@ -92,4 +99,28 @@ public class FileHelper {
 
         return id3v2Tag;
     }
+
+    public static boolean ifContainsAnyMp3File(List<File> files) {
+        for (File file : files) {
+            if (Constants.MP3_FILE_TYPE_EXTENSION.equalsIgnoreCase(getFileExtension(file))) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static List<File> getAllMp3Files(List<File> files) {
+        List<File> mp3Files = new LinkedList<>();
+        if (files != null) {
+            for (File file : files) {
+                if (Constants.MP3_FILE_TYPE_EXTENSION.equalsIgnoreCase(getFileExtension(file))) {
+                    mp3Files.add(file);
+                }
+            }
+        }
+
+        return mp3Files;
+    }
+
 }
