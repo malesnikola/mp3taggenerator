@@ -13,8 +13,7 @@ import javafx.scene.input.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import main.java.domain.Mp3Details;
-import main.java.repositories.Mp3Repository;
-import main.java.service.Mp3Service;
+import main.java.model.Mp3Model;
 import main.java.util.Constants;
 import main.java.util.FileHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +25,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class MainScreenController implements Mp3Repository.Mp3FilesObserver {
+public class MainScreenController implements Mp3Model.Mp3FilesObserver {
 
     @Autowired
-    private Mp3Repository mp3Repository;
+    private Mp3Model mp3Model;
 
     private Scene scene;
 
@@ -51,7 +50,7 @@ public class MainScreenController implements Mp3Repository.Mp3FilesObserver {
 
     @FXML
     public void initialize() {
-        mp3Repository.registerObserver(this);
+        mp3Model.registerObserver(this);
 
         tableView.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
@@ -63,7 +62,7 @@ public class MainScreenController implements Mp3Repository.Mp3FilesObserver {
                 case DELETE:
                     ObservableList<Mp3Details> selectedItems = tableView.getSelectionModel().getSelectedItems();
                     List<String> filePathsForRemove = selectedItems.stream().map(Mp3Details::getFilePath).collect(Collectors.toList());
-                    mp3Repository.removeImportedFiles(filePathsForRemove);
+                    mp3Model.removeImportedFiles(filePathsForRemove);
                     break;
                 case ESCAPE:
                     tableView.getSelectionModel().clearSelection();
@@ -114,7 +113,7 @@ public class MainScreenController implements Mp3Repository.Mp3FilesObserver {
                 if (db.hasFiles()) {
                     success = true;
                     List<File> mp3Files = FileHelper.getAllMp3Files(db.getFiles());
-                    mp3Repository.importFiles(mp3Files);
+                    mp3Model.importFiles(mp3Files);
                 }
 
                 event.setDropCompleted(success);
@@ -131,7 +130,7 @@ public class MainScreenController implements Mp3Repository.Mp3FilesObserver {
         // Open dialog for choosing mp3 files
         List<File> files = fileChooser.showOpenMultipleDialog(tableView.getScene().getWindow());
         if (files != null) {
-            mp3Repository.importFiles(files);
+            mp3Model.importFiles(files);
         }
     }
 
@@ -147,18 +146,18 @@ public class MainScreenController implements Mp3Repository.Mp3FilesObserver {
                 }
             }
 
-            mp3Repository.importFiles(filesForImport);
+            mp3Model.importFiles(filesForImport);
         }
     }
 
     public void start() {
-        mp3Repository.generateTagsForImportedFiles(cyrillicRadioButton.isSelected());
-        mp3Repository.saveImportedFiles();
+        mp3Model.generateTagsForImportedFiles(cyrillicRadioButton.isSelected());
+        mp3Model.saveImportedFiles();
     }
 
     private void updateTable() {
         tableData = FXCollections.observableArrayList();
-        for (Mp3File mp3File : mp3Repository.getImportedFiles().values()) {
+        for (Mp3File mp3File : mp3Model.getImportedFiles().values()) {
             tableData.add(Mp3Details.deserialize(mp3File));
         }
 

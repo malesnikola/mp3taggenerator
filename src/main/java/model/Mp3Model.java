@@ -1,4 +1,4 @@
-package main.java.repositories;
+package main.java.model;
 
 import com.mpatric.mp3agic.*;
 import main.java.domain.FailedFileDetails;
@@ -12,9 +12,9 @@ import java.io.IOException;
 import java.util.*;
 
 @Repository
-public class Mp3Repository {
+public class Mp3Model {
 
-    private static Logger logger = Logger.getLogger(Mp3Repository.class);
+    private static Logger logger = Logger.getLogger(Mp3Model.class);
 
     private Map<String, Mp3File> importedFiles = new HashMap<>();
 

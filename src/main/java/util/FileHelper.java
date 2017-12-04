@@ -1,13 +1,13 @@
 package main.java.util;
 
-import com.mpatric.mp3agic.*;
+import com.mpatric.mp3agic.ID3v2;
+import com.mpatric.mp3agic.ID3v23Tag;
+import com.mpatric.mp3agic.Mp3File;
 import main.java.exceptions.FileNameBadFormatException;
-import main.java.service.Mp3Service;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
