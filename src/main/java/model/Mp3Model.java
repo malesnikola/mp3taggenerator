@@ -3,15 +3,15 @@ package main.java.model;
 import com.mpatric.mp3agic.*;
 import main.java.domain.FailedFileDetails;
 import main.java.exceptions.FileNameBadFormatException;
-import main.java.util.FileHelper;
+import main.java.service.Mp3Service;
 import org.apache.log4j.Logger;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-@Repository
+@Component
 public class Mp3Model {
 
     private static Logger logger = Logger.getLogger(Mp3Model.class);
@@ -87,7 +87,7 @@ public class Mp3Model {
 
         for (Mp3File file : importedFiles.values()) {
             try {
-                ID3v2 id3v2Tag = FileHelper.crateID3v2Tag(file, isCyrillicTags);
+                ID3v2 id3v2Tag = Mp3Service.crateID3v2Tag(file, isCyrillicTags);
                 file.removeId3v2Tag();
                 file.setId3v2Tag(id3v2Tag);
             } catch (FileNameBadFormatException e) {

@@ -15,7 +15,7 @@ import javafx.stage.FileChooser;
 import main.java.domain.Mp3Details;
 import main.java.model.Mp3Model;
 import main.java.util.Constants;
-import main.java.util.FileHelper;
+import main.java.service.Mp3Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -96,7 +96,7 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
             @Override
             public void handle(DragEvent event) {
                 Dragboard db = event.getDragboard();
-                if (db.hasFiles() && FileHelper.ifContainsAnyMp3File(db.getFiles())) {
+                if (db.hasFiles() && Mp3Service.ifContainsAnyMp3File(db.getFiles())) {
                     event.acceptTransferModes(TransferMode.COPY);
                 } else {
                     event.consume();
@@ -112,7 +112,7 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
                 boolean success = false;
                 if (db.hasFiles()) {
                     success = true;
-                    List<File> mp3Files = FileHelper.getAllMp3Files(db.getFiles());
+                    List<File> mp3Files = Mp3Service.getAllMp3Files(db.getFiles());
                     mp3Model.importFiles(mp3Files);
                 }
 
@@ -141,7 +141,7 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
             File[] selectedFiles = selectedDirectory.listFiles();
             List<File> filesForImport = new LinkedList<>();
             for (File selectedFile : selectedFiles) {
-                if (selectedFile.isFile() && (Constants.MP3_FILE_TYPE_EXTENSION.equalsIgnoreCase(FileHelper.getFileExtension(selectedFile)))) {
+                if (selectedFile.isFile() && (Constants.MP3_FILE_TYPE_EXTENSION.equalsIgnoreCase(Mp3Service.getFileExtension(selectedFile)))) {
                     filesForImport.add(selectedFile);
                 }
             }

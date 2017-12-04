@@ -1,9 +1,10 @@
-package main.java.util;
+package main.java.service;
 
 import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.ID3v23Tag;
 import com.mpatric.mp3agic.Mp3File;
 import main.java.exceptions.FileNameBadFormatException;
+import main.java.util.Constants;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,9 +12,9 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
-public class FileHelper {
+public class Mp3Service {
 
-    private static Logger logger = Logger.getLogger(FileHelper.class);
+    private static Logger logger = Logger.getLogger(Mp3Service.class);
 
     @NotNull
     private static String translate(String message) {

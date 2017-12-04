@@ -2,11 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/service/Mp3Service.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/repositories/Mp3Repository.java" afterPath="$PROJECT_DIR$/src/main/java/model/Mp3Model.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/util/FileHelper.java" afterPath="$PROJECT_DIR$/src/main/java/service/Mp3Service.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/controllers/MainScreenController.java" afterPath="$PROJECT_DIR$/src/main/java/controllers/MainScreenController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/util/FileHelper.java" afterPath="$PROJECT_DIR$/src/main/java/util/FileHelper.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/model/Mp3Model.java" afterPath="$PROJECT_DIR$/src/main/java/model/Mp3Model.java" />
     </list>
     <ignored path="JavaFxApplication.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -84,8 +83,8 @@
             <state relative-caret-position="306">
               <caret line="40" column="53" lean-forward="false" selection-start-line="40" selection-start-column="53" selection-end-line="40" selection-end-column="53" />
               <folding>
-                <element signature="e#6707#6708#0" expanded="true" />
-                <element signature="e#6761#6762#0" expanded="true" />
+                <element signature="e#6710#6711#0" expanded="true" />
+                <element signature="e#6764#6765#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -98,18 +97,18 @@
               <caret line="14" column="23" lean-forward="true" selection-start-line="14" selection-start-column="23" selection-end-line="14" selection-end-column="23" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#878#879#0" expanded="true" />
-                <element signature="e#914#915#0" expanded="true" />
-                <element signature="e#980#981#0" expanded="true" />
-                <element signature="e#1025#1026#0" expanded="true" />
-                <element signature="e#1090#1091#0" expanded="true" />
-                <element signature="e#1134#1135#0" expanded="true" />
-                <element signature="e#1202#1203#0" expanded="true" />
-                <element signature="e#1249#1250#0" expanded="true" />
-                <element signature="e#5725#5726#0" expanded="true" />
-                <element signature="e#5764#5765#0" expanded="true" />
-                <element signature="e#5829#5830#0" expanded="true" />
-                <element signature="e#5871#5872#0" expanded="true" />
+                <element signature="e#879#880#0" expanded="true" />
+                <element signature="e#915#916#0" expanded="true" />
+                <element signature="e#981#982#0" expanded="true" />
+                <element signature="e#1026#1027#0" expanded="true" />
+                <element signature="e#1091#1092#0" expanded="true" />
+                <element signature="e#1135#1136#0" expanded="true" />
+                <element signature="e#1203#1204#0" expanded="true" />
+                <element signature="e#1250#1251#0" expanded="true" />
+                <element signature="e#5726#5727#0" expanded="true" />
+                <element signature="e#5765#5766#0" expanded="true" />
+                <element signature="e#5830#5831#0" expanded="true" />
+                <element signature="e#5872#5873#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -125,14 +124,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="FileHelper.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/util/FileHelper.java">
+      <file leaf-file-name="Mp3Service.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/service/Mp3Service.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="117" column="39" lean-forward="false" selection-start-line="117" selection-start-column="39" selection-end-line="117" selection-end-column="39" />
+            <state relative-caret-position="323">
+              <caret line="70" column="5" lean-forward="true" selection-start-line="70" selection-start-column="5" selection-end-line="70" selection-end-column="5" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="method#translate#0;class#FileHelper#0" expanded="false" />
+                <element signature="method#translate#0;class#Mp3Service#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -208,13 +207,14 @@
         <option value="$PROJECT_DIR$/src/main/java/exceptions/FileNameBadFormat.java" />
         <option value="$PROJECT_DIR$/src/main/resources/view/screen_main.fxml" />
         <option value="$PROJECT_DIR$/src/main/java/domain/FailedFileDetails.java" />
-        <option value="$PROJECT_DIR$/src/main/java/service/Mp3Service.java" />
         <option value="$PROJECT_DIR$/src/main/java/repositories/Mp3Repository.java" />
         <option value="$PROJECT_DIR$/src/main/java/main/Main.java" />
         <option value="$PROJECT_DIR$/src/main/java/controllers/MainScreenController.java" />
         <option value="$PROJECT_DIR$/src/main/java/repositories/Mp3Model.java" />
         <option value="$PROJECT_DIR$/src/main/java/model/Mp3Model.java" />
         <option value="$PROJECT_DIR$/src/main/java/util/FileHelper.java" />
+        <option value="$PROJECT_DIR$/src/main/java/util/Mp3Service.java" />
+        <option value="$PROJECT_DIR$/src/main/java/service/Mp3Service.java" />
       </list>
     </option>
   </component>
@@ -308,6 +308,14 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="model" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MP3TagGenerator" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MP3TagGenerator" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="service" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="MP3TagGenerator" type="b2602c69:ProjectViewProjectNode" />
@@ -587,19 +595,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/resources/view/screen_main.fxml">
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="2652">
-          <caret line="156" column="47" lean-forward="false" selection-start-line="156" selection-start-column="47" selection-end-line="156" selection-end-column="47" />
-          <folding>
-            <marker date="1512319784112" expanded="true" signature="5284:5317" ph="..." />
-          </folding>
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="JavaFX-Scene-Builder">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/rs/males/mp3taggenerator/Controller.java" />
     <entry file="file://$PROJECT_DIR$/src/main/resources/view/gds.fxml" />
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_144/src.zip!/java/net/URLClassLoader.java">
@@ -917,14 +912,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/util/Constants.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="58" lean-forward="false" selection-start-line="3" selection-start-column="58" selection-end-line="3" selection-end-column="58" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/controllers/MainScreenController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
           <caret line="40" column="53" lean-forward="false" selection-start-line="40" selection-start-column="53" selection-end-line="40" selection-end-column="53" />
           <folding>
-            <element signature="e#6707#6708#0" expanded="true" />
-            <element signature="e#6761#6762#0" expanded="true" />
+            <element signature="e#6710#6711#0" expanded="true" />
+            <element signature="e#6764#6765#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../libraries/spring-context-4.3.13.RELEASE.jar!/org/springframework/stereotype/Repository.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="16" column="10" lean-forward="false" selection-start-line="16" selection-start-column="1" selection-end-line="16" selection-end-column="10" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -934,37 +945,29 @@
           <caret line="14" column="23" lean-forward="true" selection-start-line="14" selection-start-column="23" selection-end-line="14" selection-end-column="23" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#878#879#0" expanded="true" />
-            <element signature="e#914#915#0" expanded="true" />
-            <element signature="e#980#981#0" expanded="true" />
-            <element signature="e#1025#1026#0" expanded="true" />
-            <element signature="e#1090#1091#0" expanded="true" />
-            <element signature="e#1134#1135#0" expanded="true" />
-            <element signature="e#1202#1203#0" expanded="true" />
-            <element signature="e#1249#1250#0" expanded="true" />
-            <element signature="e#5725#5726#0" expanded="true" />
-            <element signature="e#5764#5765#0" expanded="true" />
-            <element signature="e#5829#5830#0" expanded="true" />
-            <element signature="e#5871#5872#0" expanded="true" />
+            <element signature="e#879#880#0" expanded="true" />
+            <element signature="e#915#916#0" expanded="true" />
+            <element signature="e#981#982#0" expanded="true" />
+            <element signature="e#1026#1027#0" expanded="true" />
+            <element signature="e#1091#1092#0" expanded="true" />
+            <element signature="e#1135#1136#0" expanded="true" />
+            <element signature="e#1203#1204#0" expanded="true" />
+            <element signature="e#1250#1251#0" expanded="true" />
+            <element signature="e#5726#5727#0" expanded="true" />
+            <element signature="e#5765#5766#0" expanded="true" />
+            <element signature="e#5830#5831#0" expanded="true" />
+            <element signature="e#5872#5873#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/util/Constants.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/service/Mp3Service.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="58" lean-forward="false" selection-start-line="3" selection-start-column="58" selection-end-line="3" selection-end-column="58" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/util/FileHelper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="117" column="39" lean-forward="false" selection-start-line="117" selection-start-column="39" selection-end-line="117" selection-end-column="39" />
+        <state relative-caret-position="323">
+          <caret line="70" column="5" lean-forward="true" selection-start-line="70" selection-start-column="5" selection-end-line="70" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="method#translate#0;class#FileHelper#0" expanded="false" />
+            <element signature="method#translate#0;class#Mp3Service#0" expanded="false" />
           </folding>
         </state>
       </provider>
