@@ -15,11 +15,11 @@ import java.util.List;
 public class Mp3Service {
 
     private static Logger logger = Logger.getLogger(Mp3Service.class);
+    private static String[] abcCyr = {" ", "-", "&", ",", "(", ")", "а", "б", "в", "г", "д", "ђ", "е", "ж", "з", "и", "ј", "к", "л", "љ",  "м", "н", "њ",  "о", "п", "р", "с", "т", "ћ", "у", "ф", "х", "ц", "ч", "џ",  "ш", "А", "Б", "В", "Г", "Д", "Ђ", "Е", "Ж", "З", "И", "Ј", "К", "Л", "Љ",  "М", "Н", "Њ",  "О", "П", "Р", "С", "Т", "Ћ", "У", "Ф", "Х", "Ц", "Ч", "Џ",  "Ш", "a", "b", "v", "g", "d", "đ", "e", "ž", "z", "i", "j", "k", "l", "lj", "m", "n", "nj", "o", "p", "r", "s", "t", "ć", "u", "f", "h", "c", "č", "dž", "š", "x",  "A", "B", "V", "G", "D", "Đ", "E", "Ž", "Z", "I", "J", "K", "L", "Lj", "M", "N", "Nj", "O", "P", "R", "S", "T", "Ć", "U", "F", "H", "C", "Č", "Dž", "Š", "X",  "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"};
+    private static String[] abcLat = {" ", "-", "&", ",", "(", ")", "a", "b", "v", "g", "d", "đ", "e", "ž", "z", "i", "j", "k", "l", "lj", "m", "n", "nj", "o", "p", "r", "s", "t", "ć", "u", "f", "h", "c", "č", "dž", "š", "A", "B", "V", "G", "D", "Đ", "E", "Ž", "Z", "I", "J", "K", "L", "Lj", "M", "N", "Nj", "O", "P", "R", "S", "T", "Ć", "U", "F", "H", "C", "Č", "Dž", "Š", "а", "б", "в", "г", "д", "ђ", "е", "ж", "з", "и", "ј", "к", "л", "љ",  "м", "н", "њ",  "о", "п", "р", "с", "т", "ћ", "у", "ф", "х", "ц", "ч", "џ",  "ш", "кс", "А", "Б", "В", "Г", "Д", "Ђ", "Е", "Ж", "З", "И", "Ј", "К", "Л", "Љ",  "М", "Н", "Њ",  "О", "П", "Р", "С", "Т", "Ћ", "У", "Ф", "Х", "Ц", "Ч", "Џ",  "Ш", "КС", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"};
 
     @NotNull
     private static String translate(String message) {
-        String[] abcCyr = {" ", ",", "(", ")", "а", "б", "в", "г", "д", "ђ", "е", "ж", "з", "и", "ј", "к", "л", "љ",  "м", "н", "њ",  "о", "п", "р", "с", "т", "ћ", "у", "ф", "х", "ц", "ч", "џ",  "ш", "А", "Б", "В", "Г", "Д", "Ђ", "Е", "Ж", "З", "И", "Ј", "К", "Л", "Љ",  "М", "Н", "Њ",  "О", "П", "Р", "С", "Т", "Ћ", "У", "Ф", "Х", "Ц", "Ч", "Џ",  "Ш", "a", "b", "v", "g", "d", "đ", "e", "ž", "z", "i", "j", "k", "l", "lj", "m", "n", "nj", "o", "p", "r", "s", "t", "ć", "u", "f", "h", "c", "č", "dž", "š", "A", "B", "V", "G", "D", "Đ", "E", "Ž", "Z", "I", "J", "K", "L", "Lj", "M", "N", "Nj", "O", "P", "R", "S", "T", "Ć", "U", "F", "H", "C", "Č", "Dž", "Š"};
-        String[] abcLat = {" ", ",", "(", ")", "a", "b", "v", "g", "d", "đ", "e", "ž", "z", "i", "j", "k", "l", "lj", "m", "n", "nj", "o", "p", "r", "s", "t", "ć", "u", "f", "h", "c", "č", "dž", "š", "A", "B", "V", "G", "D", "Đ", "E", "Ž", "Z", "I", "J", "K", "L", "Lj", "M", "N", "Nj", "O", "P", "R", "S", "T", "Ć", "U", "F", "H", "C", "Č", "Dž", "Š", "а", "б", "в", "г", "д", "ђ", "е", "ж", "з", "и", "ј", "к", "л", "љ",  "м", "н", "њ",  "о", "п", "р", "с", "т", "ћ", "у", "ф", "х", "ц", "ч", "џ",  "ш", "А", "Б", "В", "Г", "Д", "Ђ", "Е", "Ж", "З", "И", "Ј", "К", "Л", "Љ",  "М", "Н", "Њ",  "О", "П", "Р", "С", "Т", "Ћ", "У", "Ф", "Х", "Ц", "Ч", "Џ",  "Ш"};
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < message.length(); i++) {
             for (int x = 0; x < abcCyr.length; x++) {
@@ -32,9 +32,6 @@ public class Mp3Service {
                         i++;
                     } else if (message.charAt(i) == 'D' && (i+1) < message.length() && (message.charAt(i+1) == 'ž' || message.charAt(i+1) == 'Ž')) {
                         builder.append("Џ");
-                        i++;
-                    } else if (message.charAt(i) == 'D' && (i+1) < message.length() && (message.charAt(i+1) == 'j' || message.charAt(i+1) == 'J')) {
-                        builder.append("Ђ");
                         i++;
                     } else if (message.charAt(i) == 'Њ') {
                         builder.append("Nj");
@@ -50,9 +47,6 @@ public class Mp3Service {
                         i++;
                     } else if (message.charAt(i) == 'd' && (i+1) < message.length() && message.charAt(i+1) == 'ž') {
                         builder.append("џ");
-                        i++;
-                    } else if (message.charAt(i) == 'd' && (i+1) < message.length() && message.charAt(i+1) == 'j') {
-                        builder.append("ђ");
                         i++;
                     } else if (message.charAt(i) == 'њ') {
                         builder.append("nj");
@@ -81,14 +75,21 @@ public class Mp3Service {
         String fileName = filePath.substring(filePath.lastIndexOf(File.separator) + 1);
         fileName = fileName.substring(0, fileName.lastIndexOf('.'));
         String[] fileParts = fileName.split("-");
-        if (fileParts.length < 2 || fileParts.length > 3) {
+        if (fileParts.length < 2 || fileParts.length > 4) {
             throw new FileNameBadFormatException("File nam has bad format. Valid format is Artist - Year - Title.mp3");
         }
 
         String artistName = fileParts[0].trim();
         String titleName = fileParts[fileParts.length - 1].trim();
         String year = (fileParts.length == 3 ? fileParts[1].trim() : "");
-        if (isCyrillicTags) {
+        if(fileParts.length == 4) {
+            // TODO optimizuj ovaj upit i prethodne definicije
+            artistName = fileParts[0].trim() + " - " + fileParts[1].trim();
+            year = fileParts[2].trim();
+        }
+
+        if (isCyrillicTags && !(artistName.contains("y") || artistName.contains("Y") || artistName.contains("MC") || artistName.contains("y"))
+                           && !(titleName.contains("y") || titleName.contains("Y") || titleName.contains("MC") || titleName.contains("y"))) {   // TODO stavi ovo u posebnu metodu
             artistName = translate(artistName);
             titleName = translate(titleName);
         }
