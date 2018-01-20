@@ -1,8 +1,10 @@
 package main.java.controllers;
 
 import com.mpatric.mp3agic.Mp3File;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -45,8 +47,13 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
     private TableColumn<Mp3Details, String> trackName;
     @FXML
     private TableColumn<Mp3Details, String> trackYear;
+    @FXML
+    private ProgressBar progressBar;
 
     private ObservableList<Mp3Details> tableData;
+
+    // test speed
+    long longerTime = 0;
 
     @FXML
     public void initialize() {
@@ -108,12 +115,50 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
         scene.setOnDragDropped(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
+
                 Dragboard db = event.getDragboard();
                 boolean success = false;
                 if (db.hasFiles()) {
                     success = true;
-                    List<File> mp3Files = Mp3Service.getAllMp3Files(db.getFiles());
-                    mp3Model.importFiles(mp3Files);
+                    List<File> dbFiles = db.getFiles();
+
+                    ProgressForm pForm = new ProgressForm();
+
+                    final Task<Boolean> task = new Task<Boolean>() {
+                        @Override
+                        protected Boolean call() throws Exception {
+                            long startTime = System.currentTimeMillis();
+                            //List<File> mp3Files = Mp3Service.getAllMp3Files(dbFiles);
+                            mp3Model.importFiles(dbFiles);
+                            for(int i=1; i<=100; i++){
+                                updateProgress(i, 100);
+                                Thread.sleep(300);
+                            }
+
+                            System.out.println("CALCULATION = " + (System.currentTimeMillis() - startTime));
+                            return true;
+                        }
+                    };
+
+                    // binds progress of progress bars to progress of task:
+                    pForm.activateProgressBar(task);
+
+                    task.setOnCancelled(event2 -> {
+                        tableView.getScene().getRoot().getChildrenUnmodifiable().forEach(c->c.setDisable(false));
+                        pForm.getDialogStage().close();
+                    });
+
+                    // in real life this method would get the result of the task
+                    // and update the UI based on its value:
+                    task.setOnSucceeded(event2 -> {
+                        tableView.getScene().getRoot().getChildrenUnmodifiable().forEach(c->c.setDisable(false));
+                        pForm.getDialogStage().close();
+                    });
+
+                    tableView.getScene().getRoot().getChildrenUnmodifiable().forEach(c->c.setDisable(true));
+                    pForm.getDialogStage().show();
+                    //progressBar.progressProperty().bind(task.progressProperty());
+                    new Thread(task).start();
                 }
 
                 event.setDropCompleted(success);
@@ -157,6 +202,7 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
 
     private void updateTable() {
         tableData = FXCollections.observableArrayList();
+        //mp3Model.getImportedFiles().values().parallelStream().forEach(f -> tableData.add(Mp3Details.deserialize(f)));
         for (Mp3File mp3File : mp3Model.getImportedFiles().values()) {
             tableData.add(Mp3Details.deserialize(mp3File));
         }
@@ -175,10 +221,32 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
         tableView.sort();
     }
 
+    private void addFileToTable(Mp3File file) {
+        tableData.add(Mp3Details.deserialize(file));
+        //tableView.sort();
+    }
+
+    @Override
+    public void onImportedFileChanged(Mp3File file) {
+        Platform.runLater ( () -> {
+            /*long startTime = System.currentTimeMillis();*/
+            addFileToTable(file);
+            /*long spendTime = System.currentTimeMillis() - startTime;
+            if (spendTime > longerTime) {
+                longerTime = spendTime;
+                System.out.println("MAXTIME = " + longerTime);
+            }*/
+        });
+    }
+
     @Override
     public void onImportedFilesChanged() {
-        System.out.println("On imported files changed");
-        updateTable();
+        Platform.runLater ( () -> {
+            long startTime = System.currentTimeMillis();
+            System.out.println("On imported files changed");
+            updateTable();
+            System.out.println("PLOTTING = " + (System.currentTimeMillis() - startTime));
+        });
     }
 
     @Override

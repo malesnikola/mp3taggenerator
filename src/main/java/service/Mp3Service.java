@@ -9,6 +9,8 @@ import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -113,13 +115,13 @@ public class Mp3Service {
     }
 
     public static List<File> getAllMp3Files(List<File> files) {
-        List<File> mp3Files = new LinkedList<>();
+        List<File> mp3Files = Collections.synchronizedList(new ArrayList<>());
         if (files != null) {
-            for (File file : files) {
+            files.parallelStream().forEach(file -> {
                 if (Constants.MP3_FILE_TYPE_EXTENSION.equalsIgnoreCase(getFileExtension(file))) {
                     mp3Files.add(file);
                 }
-            }
+            });
         }
 
         return mp3Files;

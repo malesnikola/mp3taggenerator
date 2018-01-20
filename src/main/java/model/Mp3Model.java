@@ -4,21 +4,23 @@ import com.mpatric.mp3agic.*;
 import main.java.domain.FailedFileDetails;
 import main.java.exceptions.FileNameBadFormatException;
 import main.java.service.Mp3Service;
+import main.java.util.Constants;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class Mp3Model {
 
     private static Logger logger = Logger.getLogger(Mp3Model.class);
 
-    private Map<String, Mp3File> importedFiles = new HashMap<>();
+    private Map<String, Mp3File> importedFiles = new ConcurrentHashMap<>();
 
-    private List<FailedFileDetails> lastFailedLoadingFiles = new LinkedList<>();
+    private List<FailedFileDetails> lastFailedLoadingFiles = Collections.synchronizedList(new ArrayList<>());
 
     private List<FailedFileDetails> lastFailedSavingFiles = new LinkedList<>();
 
@@ -42,14 +44,31 @@ public class Mp3Model {
         return lastFailedGeneratingTags;
     }
 
+    public void importFile(File file){
+        String filePath = file.getPath();
+        if (!importedFiles.containsKey(filePath)) {
+            try {
+                Mp3File newFile = new Mp3File(filePath);
+                importedFiles.put(filePath, newFile);
+                observers.forEach(o -> o.onImportedFileChanged(newFile));
+            } catch (IOException | UnsupportedTagException | InvalidDataException e) {
+                logger.debug("Excepton in method importFiles: " + e.getMessage());
+                lastFailedLoadingFiles.add(new FailedFileDetails(filePath, e.getMessage()));
+            } catch (Exception e) {
+                logger.debug("Unexpected excepton in method importFiles: " + e.getMessage());
+                lastFailedLoadingFiles.add(new FailedFileDetails(filePath, "Unexpected excepton: " + e.getMessage()));
+            }
+        }
+    }
+
     public void importFiles(List<File> files) {
         if (files != null && !files.isEmpty()) {
             int previousSizeOfImportedFiles = importedFiles.size();
-            lastFailedLoadingFiles = new LinkedList<>();
+            lastFailedLoadingFiles = Collections.synchronizedList(new ArrayList<>());
 
-            for (File file : files) {
+            files.parallelStream().forEach(file -> {
                 String filePath = file.getPath();
-                if (!importedFiles.containsKey(filePath)) {
+                if (Constants.MP3_FILE_TYPE_EXTENSION.equalsIgnoreCase(Mp3Service.getFileExtension(file)) && !importedFiles.containsKey(filePath)) {
                     try {
                         importedFiles.put(filePath, new Mp3File(filePath));
                     } catch (IOException | UnsupportedTagException | InvalidDataException e) {
@@ -60,7 +79,7 @@ public class Mp3Model {
                         lastFailedLoadingFiles.add(new FailedFileDetails(filePath, "Unexpected excepton: " + e.getMessage()));
                     }
                 }
-            }
+            });
 
             if (previousSizeOfImportedFiles != importedFiles.size() || !lastFailedLoadingFiles.isEmpty()) {
                 observers.forEach(Mp3FilesObserver::onImportedFilesChanged);
@@ -142,6 +161,8 @@ public class Mp3Model {
     }
 
     public interface Mp3FilesObserver {
+        void onImportedFileChanged(Mp3File mp3File);
+
         void onImportedFilesChanged();
 
         void onSavedImportedFiles();

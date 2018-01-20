@@ -44,7 +44,7 @@
       </MenuBar>
    </top>
    <bottom>
-      <ProgressBar maxHeight="80.0" maxWidth="561.0" minHeight="80.0" minWidth="561.0" prefHeight="80.0" prefWidth="561.0" progress="0.0" BorderPane.alignment="CENTER">
+      <ProgressBar fx:id="progressBar" maxHeight="80.0" maxWidth="561.0" minHeight="80.0" minWidth="561.0" prefHeight="80.0" prefWidth="561.0" progress="0.0" BorderPane.alignment="CENTER">
          <padding>
             <Insets bottom="30.0" top="30.0" />
          </padding>
