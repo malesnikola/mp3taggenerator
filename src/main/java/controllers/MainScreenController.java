@@ -18,6 +18,7 @@ import main.java.domain.Mp3Details;
 import main.java.model.Mp3Model;
 import main.java.util.Constants;
 import main.java.service.Mp3Service;
+import main.java.workers.ImportFilesWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -122,43 +123,17 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
                     success = true;
                     List<File> dbFiles = db.getFiles();
 
-                    ProgressForm pForm = new ProgressForm();
-
-                    final Task<Boolean> task = new Task<Boolean>() {
-                        @Override
-                        protected Boolean call() throws Exception {
-                            long startTime = System.currentTimeMillis();
-                            //List<File> mp3Files = Mp3Service.getAllMp3Files(dbFiles);
-                            mp3Model.importFiles(dbFiles);
-                            for(int i=1; i<=100; i++){
-                                updateProgress(i, 100);
-                                Thread.sleep(300);
-                            }
-
-                            System.out.println("CALCULATION = " + (System.currentTimeMillis() - startTime));
-                            return true;
-                        }
-                    };
+                    ProgressForm progressForm = new ProgressForm(scene);
+                    Task importFilesWorker = new ImportFilesWorker(mp3Model, progressForm, dbFiles);
 
                     // binds progress of progress bars to progress of task:
-                    pForm.activateProgressBar(task);
+                    progressForm.activateProgressBar(importFilesWorker);
 
-                    task.setOnCancelled(event2 -> {
-                        tableView.getScene().getRoot().getChildrenUnmodifiable().forEach(c->c.setDisable(false));
-                        pForm.getDialogStage().close();
-                    });
+                    scene.getRoot().getChildrenUnmodifiable().forEach(c -> c.setDisable(true));
 
-                    // in real life this method would get the result of the task
-                    // and update the UI based on its value:
-                    task.setOnSucceeded(event2 -> {
-                        tableView.getScene().getRoot().getChildrenUnmodifiable().forEach(c->c.setDisable(false));
-                        pForm.getDialogStage().close();
-                    });
-
-                    tableView.getScene().getRoot().getChildrenUnmodifiable().forEach(c->c.setDisable(true));
-                    pForm.getDialogStage().show();
-                    //progressBar.progressProperty().bind(task.progressProperty());
-                    new Thread(task).start();
+                    // open progress dialog
+                    progressForm.getDialogStage().show();
+                    new Thread(importFilesWorker).start();
                 }
 
                 event.setDropCompleted(success);

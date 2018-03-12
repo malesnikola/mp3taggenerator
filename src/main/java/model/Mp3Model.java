@@ -1,10 +1,12 @@
 package main.java.model;
 
 import com.mpatric.mp3agic.*;
+import javafx.concurrent.Task;
 import main.java.domain.FailedFileDetails;
 import main.java.exceptions.FileNameBadFormatException;
 import main.java.service.Mp3Service;
 import main.java.util.Constants;
+import main.java.workers.ImportFilesWorker;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 public class Mp3Model {
@@ -62,9 +65,15 @@ public class Mp3Model {
     }
 
     public void importFiles(List<File> files) {
+        importFiles(files, null);
+    }
+
+    public void importFiles(List<File> files, ImportFilesWorker worker) {
         if (files != null && !files.isEmpty()) {
             int previousSizeOfImportedFiles = importedFiles.size();
             lastFailedLoadingFiles = Collections.synchronizedList(new ArrayList<>());
+
+            AtomicInteger progress = new AtomicInteger();
 
             files.parallelStream().forEach(file -> {
                 String filePath = file.getPath();
@@ -78,6 +87,10 @@ public class Mp3Model {
                         logger.debug("Unexpected excepton in method importFiles: " + e.getMessage());
                         lastFailedLoadingFiles.add(new FailedFileDetails(filePath, "Unexpected excepton: " + e.getMessage()));
                     }
+                }
+
+                if (worker != null) {
+                    worker.updateProgress(progress.incrementAndGet());
                 }
             });
 
