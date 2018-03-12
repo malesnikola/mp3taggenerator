@@ -3,6 +3,7 @@ package main.java.model;
 import com.mpatric.mp3agic.*;
 import javafx.concurrent.Task;
 import main.java.domain.FailedFileDetails;
+import main.java.domain.Mp3FileWrapper;
 import main.java.exceptions.FileNameBadFormatException;
 import main.java.service.Mp3Service;
 import main.java.util.Constants;
@@ -21,7 +22,7 @@ public class Mp3Model {
 
     private static Logger logger = Logger.getLogger(Mp3Model.class);
 
-    private Map<String, Mp3File> importedFiles = new ConcurrentHashMap<>();
+    private Map<String, Mp3FileWrapper> importedFiles = new ConcurrentHashMap<>();
 
     private List<FailedFileDetails> lastFailedLoadingFiles = Collections.synchronizedList(new ArrayList<>());
 
@@ -31,7 +32,7 @@ public class Mp3Model {
 
     private Set<Mp3FilesObserver> observers = new HashSet<>();
 
-    public Map<String, Mp3File> getImportedFiles() {
+    public Map<String, Mp3FileWrapper> getImportedFiles() {
         return importedFiles;
     }
 
@@ -51,7 +52,7 @@ public class Mp3Model {
         String filePath = file.getPath();
         if (!importedFiles.containsKey(filePath)) {
             try {
-                Mp3File newFile = new Mp3File(filePath);
+                Mp3FileWrapper newFile = new Mp3FileWrapper(filePath);
                 importedFiles.put(filePath, newFile);
                 observers.forEach(o -> o.onImportedFileChanged(newFile));
             } catch (IOException | UnsupportedTagException | InvalidDataException e) {
@@ -79,7 +80,8 @@ public class Mp3Model {
                 String filePath = file.getPath();
                 if (!importedFiles.containsKey(filePath)) {
                     try {
-                        importedFiles.put(filePath, new Mp3File(filePath));
+                        Mp3FileWrapper mp3FileWrapper = new Mp3FileWrapper(filePath);
+                        importedFiles.put(filePath, mp3FileWrapper);
                     } catch (IOException | UnsupportedTagException | InvalidDataException e) {
                         logger.debug("Excepton in method importFiles: " + e.getMessage());
                         lastFailedLoadingFiles.add(new FailedFileDetails(filePath, e.getMessage()));
@@ -174,7 +176,7 @@ public class Mp3Model {
     }
 
     public interface Mp3FilesObserver {
-        void onImportedFileChanged(Mp3File mp3File);
+        void onImportedFileChanged(Mp3FileWrapper mp3File);
 
         void onImportedFilesChanged();
 
