@@ -12,8 +12,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import main.java.domain.FailedFileDetails;
 import main.java.domain.Mp3Details;
 import main.java.model.Mp3Model;
 import main.java.util.Constants;
@@ -23,6 +28,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,6 +44,10 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
 
     @FXML
     private RadioButton cyrillicRadioButton;
+    @FXML
+    private ScrollPane scrollPane;
+    @FXML
+    private TextFlow infoArea;
 
     @FXML
     private TableView<Mp3Details> tableView;
@@ -94,6 +105,8 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
                 tableView.getSelectionModel().clearSelection();
             }
         });
+
+
 
     }
 
@@ -216,11 +229,47 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
 
     @Override
     public void onImportedFilesChanged() {
-        Platform.runLater ( () -> {
-            long startTime = System.currentTimeMillis();
-            System.out.println("On imported files changed");
+
+        Platform.runLater(() -> {
             updateTable();
-            System.out.println("PLOTTING = " + (System.currentTimeMillis() - startTime));
+
+            Calendar rightNowCalendar = Calendar.getInstance();
+            int hours = rightNowCalendar.get(Calendar.HOUR_OF_DAY);
+            int minutes = rightNowCalendar.get(Calendar.MINUTE);
+            int seconds = rightNowCalendar.get(Calendar.SECOND);
+            String dateString = ((hours < 10) ? ("0" + hours) : hours) + ":"
+                    + ((minutes < 10) ? ("0" + minutes) : minutes) + ":"
+                    + ((seconds < 10) ? ("0" + seconds) : seconds) + " - ";
+
+            if (mp3Model.getLastFailedLoadingFiles() != null) {
+                if (mp3Model.getLastFailedLoadingFiles().size() > 0) {
+                    Text importErrorText = new Text();
+                    importErrorText.setText(dateString + "This files cannot be imported:\n");
+                    importErrorText.setFill(Color.RED);
+                    infoArea.getChildren().addAll(importErrorText);
+                    //scrollPane.setVvalue(1.0);           //1.0 means 100% at the bottom
+
+                    for (FailedFileDetails fileDetails : mp3Model.getLastFailedLoadingFiles()) {
+                        Text fileErrorText = new Text();
+                        fileErrorText.setText("\t\t " + fileDetails.getFilePath() + " (" + fileDetails.getErrorMessage() + ")\n");
+                        fileErrorText.setFill(Color.RED);
+                        infoArea.getChildren().addAll(fileErrorText);
+                        //scrollPane.setVvalue(1.0);           //1.0 means 100% at the bottom
+                    }
+                } else {
+                    Text importFilesSuccessText = new Text();
+                    importFilesSuccessText.setText(dateString + "Files imported successfully.\n");
+                    importFilesSuccessText.setFill(Color.BLUE);
+                    infoArea.getChildren().addAll(importFilesSuccessText);
+                }
+            } else {
+                Text importFilesSuccessText = new Text();
+                importFilesSuccessText.setText(dateString + "Files imported successfully.\n");
+                importFilesSuccessText.setFill(Color.BLUE);
+                infoArea.getChildren().addAll(importFilesSuccessText);
+            }
+
+            scrollPane.setVvalue(1.0);           //1.0 means 100% at the bottom
         });
     }
 

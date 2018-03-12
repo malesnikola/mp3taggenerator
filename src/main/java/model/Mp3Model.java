@@ -77,7 +77,7 @@ public class Mp3Model {
 
             files.parallelStream().forEach(file -> {
                 String filePath = file.getPath();
-                if (Constants.MP3_FILE_TYPE_EXTENSION.equalsIgnoreCase(Mp3Service.getFileExtension(file)) && !importedFiles.containsKey(filePath)) {
+                if (!importedFiles.containsKey(filePath)) {
                     try {
                         importedFiles.put(filePath, new Mp3File(filePath));
                     } catch (IOException | UnsupportedTagException | InvalidDataException e) {

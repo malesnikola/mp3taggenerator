@@ -8,9 +8,9 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -19,6 +19,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.TextFlow?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="653.0" prefWidth="943.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controllers.MainScreenController">
    <top>
@@ -115,12 +116,16 @@
                      <top>
                         <Label text="Konzola:" BorderPane.alignment="CENTER_LEFT" />
                      </top>
-                     <center>
-                        <TextArea editable="false" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-                     </center>
                      <padding>
                         <Insets bottom="5.0" left="15.0" right="5.0" />
                      </padding>
+                     <center>
+                        <ScrollPane fx:id="scrollPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                           <content>
+                              <TextFlow fx:id="infoArea" />
+                           </content>
+                        </ScrollPane>
+                     </center>
                   </BorderPane>
                   <Button fx:id="openFiles" contentDisplay="TOP" mnemonicParsing="false" onAction="#openFiles" prefHeight="50.0" prefWidth="130.0" text="Dodaj datoteke..." GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                      <graphic>
