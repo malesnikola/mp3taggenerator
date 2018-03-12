@@ -169,7 +169,7 @@
                 <TableColumn fx:id="fileName" editable="false" prefWidth="200.0" text="Naziv fajla" />
                 <TableColumn fx:id="trackArtist" editable="false" prefWidth="200.0" text="Autor" />
                   <TableColumn fx:id="trackName" editable="false" prefWidth="200.0" text="Naziv pesme" />
-                  <TableColumn fx:id="trackYear" editable="false" prefWidth="100.0" text="Godina izdanja" />
+                  <TableColumn fx:id="trackYear" editable="false" prefWidth="100.0" style="-fx-alignment: CENTER;" text="Godina izdanja" />
               </columns>
                <opaqueInsets>
                   <Insets />

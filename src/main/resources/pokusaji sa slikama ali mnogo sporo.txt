@@ -1,0 +1,32 @@
+http://blog.ngopal.com.np/2011/10/01/tableview-cell-modifiy-in-javafx/
+
+TableColumn albumArt = new TableColumn("State");
+        albumArt.setCellValueFactory(new PropertyValueFactory("stateImage"));
+        albumArt.setPrefWidth(30);
+
+
+        albumArt.setCellFactory(new Callback<TableColumn<Mp3Details,StateImage>, TableCell<Mp3Details,StateImage>>(){
+            @Override
+            public TableCell<Mp3Details, StateImage> call(TableColumn<Mp3Details, StateImage> param) {
+                TableCell<Mp3Details, StateImage> cell = new TableCell<Mp3Details, StateImage>(){
+                    ImageView imageview = new ImageView();
+                    @Override
+                    public void updateItem(StateImage item, boolean empty) {
+                        if(item != null){
+                            imageview.setFitHeight(25);
+                            imageview.setFitWidth(25);
+                            imageview.setImage(new Image("file:///C:/saved.png"));
+
+                            //SETTING ALL THE GRAPHICS COMPONENT FOR CELL
+                            setGraphic(imageview);
+                        }
+                    }
+                };
+
+                System.out.println(cell.getIndex());
+                cell.setStyle("-fx-alignment: CENTER;");
+                return cell;
+            }
+        });
+
+        tableView.getColumns().add(albumArt);

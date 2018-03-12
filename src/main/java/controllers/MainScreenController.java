@@ -11,22 +11,30 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
+import javafx.util.Callback;
 import main.java.domain.FailedFileDetails;
 import main.java.domain.Mp3Details;
+import main.java.domain.Mp3FileWrapper;
+import main.java.domain.StateImage;
 import main.java.model.Mp3Model;
 import main.java.util.Constants;
 import main.java.service.Mp3Service;
 import main.java.workers.ImportFilesWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import javafx.scene.control.TableColumn;
 
+import javax.swing.plaf.nimbus.State;
 import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
@@ -106,7 +114,46 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
             }
         });
 
+        TableColumn thirdColumn = new TableColumn("State");
+        thirdColumn.setCellValueFactory(new PropertyValueFactory<Mp3Details,String>("fileState"));
 
+        // ** The TableCell class has the method setTextFill(Paint p) that you
+        // ** need to override the text color
+        //   To obtain the TableCell we need to replace the Default CellFactory
+        //   with one that returns a new TableCell instance,
+        //   and @Override the updateItem(String item, boolean empty) method.
+        //
+        thirdColumn.setCellFactory(new Callback<TableColumn, TableCell>() {
+            public TableCell call(TableColumn param) {
+                return new TableCell<Mp3Details, String>() {
+
+                    @Override
+                    public void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (!isEmpty()) {
+                            Mp3FileWrapper.Mp3FileState state = Mp3FileWrapper.Mp3FileState.fromString(item);
+
+                            switch (state) {
+                                case SAVED:
+                                    this.setTextFill(Color.GREEN);
+                                    break;
+                                case MODIFIED:
+                                    this.setTextFill(Color.BLUE);
+                                    break;
+                                case FAILED_SAVED:
+                                    this.setTextFill(Color.RED);
+                                    break;
+                            }
+
+                            setText(item);
+                            this.setStyle("-fx-alignment: CENTER;");
+                        }
+                    }
+                };
+            }
+        });
+
+        tableView.getColumns().add(thirdColumn);
 
     }
 
@@ -191,7 +238,7 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
     private void updateTable() {
         tableData = FXCollections.observableArrayList();
         //mp3Model.getImportedFiles().values().parallelStream().forEach(f -> tableData.add(Mp3Details.deserialize(f)));
-        for (Mp3File mp3File : mp3Model.getImportedFiles().values()) {
+        for (Mp3FileWrapper mp3File : mp3Model.getImportedFiles().values()) {
             tableData.add(Mp3Details.deserialize(mp3File));
         }
 
@@ -209,13 +256,13 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
         tableView.sort();
     }
 
-    private void addFileToTable(Mp3File file) {
+    private void addFileToTable(Mp3FileWrapper file) {
         tableData.add(Mp3Details.deserialize(file));
         //tableView.sort();
     }
 
     @Override
-    public void onImportedFileChanged(Mp3File file) {
+    public void onImportedFileChanged(Mp3FileWrapper file) {
         Platform.runLater ( () -> {
             /*long startTime = System.currentTimeMillis();*/
             addFileToTable(file);
