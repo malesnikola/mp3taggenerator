@@ -1,12 +1,10 @@
 package main.java.model;
 
 import com.mpatric.mp3agic.*;
-import javafx.concurrent.Task;
 import main.java.domain.FailedFileDetails;
 import main.java.domain.Mp3FileWrapper;
 import main.java.exceptions.FileNameBadFormatException;
 import main.java.service.Mp3Service;
-import main.java.util.Constants;
 import main.java.workers.ImportFilesWorker;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
@@ -20,7 +18,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Component
 public class Mp3Model {
 
+    public enum Mp3ModelState {
+        NONE,
+        IMPORTED,
+        REMOVED,
+        GENRATED,
+        SAVED
+    }
+
     private static Logger logger = Logger.getLogger(Mp3Model.class);
+
+    private Mp3ModelState lastModelState = Mp3ModelState.NONE;
 
     private Map<String, Mp3FileWrapper> importedFiles = new ConcurrentHashMap<>();
 
@@ -48,6 +56,10 @@ public class Mp3Model {
         return lastFailedGeneratingTags;
     }
 
+    public Mp3ModelState getLastModelState() {
+        return lastModelState;
+    }
+
     public void importFile(File file){
         String filePath = file.getPath();
         if (!importedFiles.containsKey(filePath)) {
@@ -71,6 +83,8 @@ public class Mp3Model {
 
     public void importFiles(List<File> files, ImportFilesWorker worker) {
         if (files != null && !files.isEmpty()) {
+            lastModelState = Mp3ModelState.IMPORTED;
+
             int previousSizeOfImportedFiles = importedFiles.size();
             lastFailedLoadingFiles = Collections.synchronizedList(new ArrayList<>());
 
@@ -104,6 +118,8 @@ public class Mp3Model {
 
     public void removeImportedFiles(List<String> filePaths) {
         if (filePaths != null) {
+            lastModelState = Mp3ModelState.REMOVED;
+
             int previousSizeOfImportedFiles = importedFiles.size();
 
             for (String filePath : filePaths) {
@@ -118,6 +134,10 @@ public class Mp3Model {
 
     public void generateTagsForImportedFiles(boolean isCyrillicTags) {
         lastFailedGeneratingTags = new LinkedList<>();
+
+        if (importedFiles.size() > 0) {
+            lastModelState = Mp3ModelState.GENRATED;
+        }
 
         for (Mp3File file : importedFiles.values()) {
             try {
@@ -138,6 +158,10 @@ public class Mp3Model {
 
     public void saveImportedFiles() {
         lastFailedSavingFiles = new LinkedList<>();
+
+        if (importedFiles.size() > 0) {
+            lastModelState = Mp3ModelState.SAVED;
+        }
 
         for (Mp3File file : importedFiles.values()) {
             String originalFileName = file.getFilename();

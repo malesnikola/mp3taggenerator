@@ -282,47 +282,115 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
         });
     }
 
+    private void updateErrorsOnInfoArea(String errorMessage, List<FailedFileDetails> failedFiles) {
+        Text importErrorText = new Text();
+        importErrorText.setText(errorMessage);
+        importErrorText.setFill(Color.RED);
+        infoArea.getChildren().addAll(importErrorText);
+
+        for (FailedFileDetails failedFileDetails : failedFiles) {
+            Text fileErrorText = new Text("\t\t " + failedFileDetails.getFilePath() + " (" + failedFileDetails.getErrorMessage() + ")\n");
+            fileErrorText.setFill(Color.RED);
+            infoArea.getChildren().addAll(fileErrorText);
+        }
+    }
+
+    private void updateInfoArea(){
+        Calendar rightNowCalendar = Calendar.getInstance();
+        int hours = rightNowCalendar.get(Calendar.HOUR_OF_DAY);
+        int minutes = rightNowCalendar.get(Calendar.MINUTE);
+        int seconds = rightNowCalendar.get(Calendar.SECOND);
+        String dateString = ((hours < 10) ? ("0" + hours) : hours) + ":"
+                + ((minutes < 10) ? ("0" + minutes) : minutes) + ":"
+                + ((seconds < 10) ? ("0" + seconds) : seconds) + " - ";
+
+        Mp3Model.Mp3ModelState modelLastState = mp3Model.getLastModelState();
+        switch (modelLastState) {
+            case IMPORTED:
+                if (mp3Model.getLastFailedLoadingFiles().size() > 0) {
+                    updateErrorsOnInfoArea(dateString + "This files cannot be imported:\n", mp3Model.getLastFailedLoadingFiles());
+                } else {
+                    Text importFilesSuccessText = new Text(dateString + "Files imported successfully.\n");
+                    importFilesSuccessText.setFill(Color.BLUE);
+                    infoArea.getChildren().addAll(importFilesSuccessText);
+                }
+
+                break;
+            case REMOVED:
+                Text removedFilesSuccessText = new Text(dateString + "Files removed successfully.\n");
+                removedFilesSuccessText.setFill(Color.ORANGE);
+                infoArea.getChildren().addAll(removedFilesSuccessText);
+
+                break;
+            case GENRATED:
+                if (mp3Model.getLastFailedGeneratingTags().size() > 0) {
+                    updateErrorsOnInfoArea(dateString + "This files cannot be generated:\n", mp3Model.getLastFailedGeneratingTags());
+                } else {
+                    Text importFilesSuccessText = new Text(dateString + "Files generated successfully.\n");
+                    importFilesSuccessText.setFill(Color.PURPLE);
+                    infoArea.getChildren().addAll(importFilesSuccessText);
+                }
+
+                break;
+            case SAVED:
+                if (mp3Model.getLastFailedSavingFiles().size() > 0) {
+                    updateErrorsOnInfoArea(dateString + "This files cannot be generated:\n", mp3Model.getLastFailedSavingFiles());
+                } else {
+                    Text importFilesSuccessText = new Text(dateString + "Files generated successfully.\n");
+                    importFilesSuccessText.setFill(Color.GREEN);
+                    infoArea.getChildren().addAll(importFilesSuccessText);
+                }
+
+                break;
+            default:
+                break;
+        }
+
+        scrollPane.setVvalue(1.0); //1.0 means 100% at the bottom
+    }
+
     @Override
     public void onImportedFilesChanged() {
 
         Platform.runLater(() -> {
             updateTable();
+            updateInfoArea();
 
-            Calendar rightNowCalendar = Calendar.getInstance();
-            int hours = rightNowCalendar.get(Calendar.HOUR_OF_DAY);
-            int minutes = rightNowCalendar.get(Calendar.MINUTE);
-            int seconds = rightNowCalendar.get(Calendar.SECOND);
-            String dateString = ((hours < 10) ? ("0" + hours) : hours) + ":"
-                    + ((minutes < 10) ? ("0" + minutes) : minutes) + ":"
-                    + ((seconds < 10) ? ("0" + seconds) : seconds) + " - ";
-
-            if (mp3Model.getLastFailedLoadingFiles() != null) {
-                if (mp3Model.getLastFailedLoadingFiles().size() > 0) {
-                    Text importErrorText = new Text();
-                    importErrorText.setText(dateString + "This files cannot be imported:\n");
-                    importErrorText.setFill(Color.RED);
-                    infoArea.getChildren().addAll(importErrorText);
-                    //scrollPane.setVvalue(1.0);           //1.0 means 100% at the bottom
-
-                    for (FailedFileDetails fileDetails : mp3Model.getLastFailedLoadingFiles()) {
-                        Text fileErrorText = new Text();
-                        fileErrorText.setText("\t\t " + fileDetails.getFilePath() + " (" + fileDetails.getErrorMessage() + ")\n");
-                        fileErrorText.setFill(Color.RED);
-                        infoArea.getChildren().addAll(fileErrorText);
-                        //scrollPane.setVvalue(1.0);           //1.0 means 100% at the bottom
-                    }
-                } else {
-                    Text importFilesSuccessText = new Text();
-                    importFilesSuccessText.setText(dateString + "Files imported successfully.\n");
-                    importFilesSuccessText.setFill(Color.BLUE);
-                    infoArea.getChildren().addAll(importFilesSuccessText);
-                }
-            } else {
-                Text importFilesSuccessText = new Text();
-                importFilesSuccessText.setText(dateString + "Files imported successfully.\n");
-                importFilesSuccessText.setFill(Color.BLUE);
-                infoArea.getChildren().addAll(importFilesSuccessText);
-            }
+//            Calendar rightNowCalendar = Calendar.getInstance();
+//            int hours = rightNowCalendar.get(Calendar.HOUR_OF_DAY);
+//            int minutes = rightNowCalendar.get(Calendar.MINUTE);
+//            int seconds = rightNowCalendar.get(Calendar.SECOND);
+//            String dateString = ((hours < 10) ? ("0" + hours) : hours) + ":"
+//                    + ((minutes < 10) ? ("0" + minutes) : minutes) + ":"
+//                    + ((seconds < 10) ? ("0" + seconds) : seconds) + " - ";
+//
+//            if (mp3Model.getLastFailedLoadingFiles() != null) {
+//                if (mp3Model.getLastFailedLoadingFiles().size() > 0) {
+//                    Text importErrorText = new Text();
+//                    importErrorText.setText(dateString + "This files cannot be imported:\n");
+//                    importErrorText.setFill(Color.RED);
+//                    infoArea.getChildren().addAll(importErrorText);
+//                    //scrollPane.setVvalue(1.0);           //1.0 means 100% at the bottom
+//
+//                    for (FailedFileDetails fileDetails : mp3Model.getLastFailedLoadingFiles()) {
+//                        Text fileErrorText = new Text();
+//                        fileErrorText.setText("\t\t " + fileDetails.getFilePath() + " (" + fileDetails.getErrorMessage() + ")\n");
+//                        fileErrorText.setFill(Color.RED);
+//                        infoArea.getChildren().addAll(fileErrorText);
+//                        //scrollPane.setVvalue(1.0);           //1.0 means 100% at the bottom
+//                    }
+//                } else {
+//                    Text importFilesSuccessText = new Text();
+//                    importFilesSuccessText.setText(dateString + "Files imported successfully.\n");
+//                    importFilesSuccessText.setFill(Color.BLUE);
+//                    infoArea.getChildren().addAll(importFilesSuccessText);
+//                }
+//            } else {
+//                Text importFilesSuccessText = new Text();
+//                importFilesSuccessText.setText(dateString + "Files imported successfully.\n");
+//                importFilesSuccessText.setFill(Color.BLUE);
+//                infoArea.getChildren().addAll(importFilesSuccessText);
+//            }
 
             scrollPane.setVvalue(1.0);           //1.0 means 100% at the bottom
         });
