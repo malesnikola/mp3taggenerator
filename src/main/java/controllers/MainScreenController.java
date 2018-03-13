@@ -29,7 +29,9 @@ import main.java.domain.StateImage;
 import main.java.model.Mp3Model;
 import main.java.util.Constants;
 import main.java.service.Mp3Service;
+import main.java.workers.GenerateTagsWorker;
 import main.java.workers.ImportFilesWorker;
+import main.java.workers.SaveFilesWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import javafx.scene.control.TableColumn;
@@ -69,6 +71,15 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
     private TableColumn<Mp3Details, String> trackYear;
     @FXML
     private ProgressBar progressBar;
+
+    private Task saveFilesWorker;
+
+    @FXML
+    private Button generateButton;
+    @FXML
+    private Button startButton;
+    @FXML
+    private Button stopButton;
 
     private ObservableList<Mp3Details> tableData;
 
@@ -238,9 +249,39 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
         }
     }
 
+    public void generateTags() {
+        ProgressForm progressForm = new ProgressForm(scene);
+        Task generateTagsWorker = new GenerateTagsWorker(mp3Model, progressForm, cyrillicRadioButton.isSelected());
+
+        // binds progress of progress bars to progress of task:
+        progressForm.activateProgressBar(generateTagsWorker);
+
+        scene.getRoot().getChildrenUnmodifiable().forEach(c -> c.setDisable(true));
+
+        // open progress dialog
+        progressForm.getDialogStage().show();
+        new Thread(generateTagsWorker).start();
+    }
+
     public void start() {
-        mp3Model.generateTagsForImportedFiles(cyrillicRadioButton.isSelected());
-        mp3Model.saveImportedFiles();
+        saveFilesWorker = new SaveFilesWorker(mp3Model, progressBar);
+
+        progressBar.progressProperty().bind(saveFilesWorker.progressProperty());
+
+        generateButton.setDisable(true);
+        startButton.setDisable(true);
+        stopButton.setDisable(false);
+
+        // open progress dialog
+        new Thread(saveFilesWorker).start();
+    }
+
+    public void stop() {
+        if (saveFilesWorker != null) {
+            saveFilesWorker.cancel();
+        }
+
+        //onSavedImportedFiles();
     }
 
     private void updateTable() {
@@ -334,9 +375,9 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
                 break;
             case SAVED:
                 if (mp3Model.getLastFailedSavingFiles().size() > 0) {
-                    updateErrorsOnInfoArea(dateString + "This files cannot be generated:\n", mp3Model.getLastFailedSavingFiles());
+                    updateErrorsOnInfoArea(dateString + "This files cannot be saved:\n", mp3Model.getLastFailedSavingFiles());
                 } else {
-                    Text importFilesSuccessText = new Text(dateString + "Files generated successfully.\n");
+                    Text importFilesSuccessText = new Text(dateString + "Files saved successfully.\n");
                     importFilesSuccessText.setFill(Color.GREEN);
                     infoArea.getChildren().addAll(importFilesSuccessText);
                 }
@@ -351,59 +392,31 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
 
     @Override
     public void onImportedFilesChanged() {
-
         Platform.runLater(() -> {
             updateTable();
             updateInfoArea();
-
-//            Calendar rightNowCalendar = Calendar.getInstance();
-//            int hours = rightNowCalendar.get(Calendar.HOUR_OF_DAY);
-//            int minutes = rightNowCalendar.get(Calendar.MINUTE);
-//            int seconds = rightNowCalendar.get(Calendar.SECOND);
-//            String dateString = ((hours < 10) ? ("0" + hours) : hours) + ":"
-//                    + ((minutes < 10) ? ("0" + minutes) : minutes) + ":"
-//                    + ((seconds < 10) ? ("0" + seconds) : seconds) + " - ";
-//
-//            if (mp3Model.getLastFailedLoadingFiles() != null) {
-//                if (mp3Model.getLastFailedLoadingFiles().size() > 0) {
-//                    Text importErrorText = new Text();
-//                    importErrorText.setText(dateString + "This files cannot be imported:\n");
-//                    importErrorText.setFill(Color.RED);
-//                    infoArea.getChildren().addAll(importErrorText);
-//                    //scrollPane.setVvalue(1.0);           //1.0 means 100% at the bottom
-//
-//                    for (FailedFileDetails fileDetails : mp3Model.getLastFailedLoadingFiles()) {
-//                        Text fileErrorText = new Text();
-//                        fileErrorText.setText("\t\t " + fileDetails.getFilePath() + " (" + fileDetails.getErrorMessage() + ")\n");
-//                        fileErrorText.setFill(Color.RED);
-//                        infoArea.getChildren().addAll(fileErrorText);
-//                        //scrollPane.setVvalue(1.0);           //1.0 means 100% at the bottom
-//                    }
-//                } else {
-//                    Text importFilesSuccessText = new Text();
-//                    importFilesSuccessText.setText(dateString + "Files imported successfully.\n");
-//                    importFilesSuccessText.setFill(Color.BLUE);
-//                    infoArea.getChildren().addAll(importFilesSuccessText);
-//                }
-//            } else {
-//                Text importFilesSuccessText = new Text();
-//                importFilesSuccessText.setText(dateString + "Files imported successfully.\n");
-//                importFilesSuccessText.setFill(Color.BLUE);
-//                infoArea.getChildren().addAll(importFilesSuccessText);
-//            }
-
-            scrollPane.setVvalue(1.0);           //1.0 means 100% at the bottom
         });
     }
 
     @Override
     public void onSavedImportedFiles() {
-        System.out.println("On saved imported files");
-        updateTable();
+        Platform.runLater(() -> {
+            updateTable();
+            updateInfoArea();
+            progressBar.progressProperty().unbind();
+            progressBar.setProgress(0);
+            generateButton.setDisable(false);
+            startButton.setDisable(false);
+            stopButton.setDisable(true);
+            saveFilesWorker = null;
+        });
     }
 
     @Override
     public void onTagGenerated() {
-        System.out.println("On tag generated");
+        Platform.runLater(() -> {
+            updateTable();
+            updateInfoArea();
+        });
     }
 }

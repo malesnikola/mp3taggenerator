@@ -130,7 +130,7 @@
                         </ScrollPane>
                      </center>
                   </BorderPane>
-                  <Button contentDisplay="TOP" mnemonicParsing="false" onAction="#start" prefHeight="48.0" prefWidth="95.0" text="Pokreni" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                  <Button fx:id="startButton" contentDisplay="TOP" mnemonicParsing="false" onAction="#start" prefHeight="48.0" prefWidth="95.0" text="Pokreni" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                      <graphic>
                         <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -139,7 +139,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button contentDisplay="TOP" disable="true" mnemonicParsing="false" prefHeight="52.0" prefWidth="94.0" text="Zaustavi" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                  <Button fx:id="stopButton" contentDisplay="TOP" disable="true" mnemonicParsing="false" onAction="#stop" prefHeight="52.0" prefWidth="94.0" text="Zaustavi" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                      <graphic>
                         <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -178,7 +178,7 @@
                         </Label>
                      </children>
                   </GridPane>
-                  <Button contentDisplay="TOP" layoutX="393.0" layoutY="29.0" mnemonicParsing="false" onAction="#start" prefHeight="48.0" prefWidth="95.0" text="Generiši" GridPane.columnIndex="2">
+                  <Button fx:id="generateButton" contentDisplay="TOP" layoutX="393.0" layoutY="29.0" mnemonicParsing="false" onAction="#generateTags" prefHeight="48.0" prefWidth="95.0" text="Generiši" GridPane.columnIndex="2">
                      <graphic>
                         <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                            <image>

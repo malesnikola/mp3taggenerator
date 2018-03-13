@@ -12,7 +12,8 @@ public class Mp3FileWrapper extends Mp3File {
     public enum Mp3FileState {
         SAVED ("saved"),
         MODIFIED("modified"),
-        FAILED_SAVED("failed to save");
+        FAILED_MODIFIED("failed modified"),
+        FAILED_SAVED("failed saved");
 
         private String stateText;
 
