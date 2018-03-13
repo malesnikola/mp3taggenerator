@@ -114,8 +114,14 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
             }
         });
 
-        TableColumn thirdColumn = new TableColumn("State");
-        thirdColumn.setCellValueFactory(new PropertyValueFactory<Mp3Details,String>("fileState"));
+        TableColumn patternColumn = new TableColumn("Pattern");
+        patternColumn.setStyle("-fx-alignment: CENTER;");
+        patternColumn.setCellValueFactory(new PropertyValueFactory<Mp3Details,String>("filePattern"));
+
+        tableView.getColumns().add(patternColumn);
+
+        TableColumn stateColumn = new TableColumn("State");
+        stateColumn.setCellValueFactory(new PropertyValueFactory<Mp3Details,String>("fileState"));
 
         // ** The TableCell class has the method setTextFill(Paint p) that you
         // ** need to override the text color
@@ -123,7 +129,7 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
         //   with one that returns a new TableCell instance,
         //   and @Override the updateItem(String item, boolean empty) method.
         //
-        thirdColumn.setCellFactory(new Callback<TableColumn, TableCell>() {
+        stateColumn.setCellFactory(new Callback<TableColumn, TableCell>() {
             public TableCell call(TableColumn param) {
                 return new TableCell<Mp3Details, String>() {
 
@@ -147,13 +153,15 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
 
                             setText(item);
                             this.setStyle("-fx-alignment: CENTER;");
+                        } else {
+                            setText("");
                         }
                     }
                 };
             }
         });
 
-        tableView.getColumns().add(thirdColumn);
+        tableView.getColumns().add(stateColumn);
 
     }
 

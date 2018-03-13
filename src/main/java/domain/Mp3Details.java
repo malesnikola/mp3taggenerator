@@ -11,37 +11,39 @@ import javafx.scene.image.ImageView;
 import java.io.File;
 
 public class Mp3Details {
-    public static final String SAVED_FILE_IMAGE_PATH = "../../resources/images/saved.png";
-
     private final StringProperty filePath;
     private final StringProperty fileName;
     private final StringProperty trackArtist;
     private final StringProperty trackName;
     private final StringProperty trackYear;
     private final StringProperty fileState;
+    private final StringProperty filePattern;
 
-    private Mp3Details(String filePath, String fileName, String trackArtist, String trackName, String trackYear, String fileState) {
+    private Mp3Details(String filePath, String fileName, String trackArtist, String trackName, String trackYear, String fileState, String filePattern) {
         this.filePath = new SimpleStringProperty(filePath);
         this.fileName = new SimpleStringProperty(fileName);
         this.trackArtist = new SimpleStringProperty(trackArtist);
         this.trackName = new SimpleStringProperty(trackName);
         this.trackYear = new SimpleStringProperty(trackYear);
         this.fileState = new SimpleStringProperty(fileState);
+        this.filePattern = new SimpleStringProperty(filePattern);
     }
 
     public static Mp3Details deserialize(Mp3FileWrapper file) {
         String filePath = file.getFilename();
         String fileName = filePath.substring(filePath.lastIndexOf(File.separator) + 1);
         String fileState = file.getState().getStateText();
+        String patternCode = file.getPattern().getPatternCode();
         ID3v1 id3v2Tag = file.getId3v2Tag();
         if (id3v2Tag != null) {
             String trackArtist = id3v2Tag.getArtist();
             String trackName = id3v2Tag.getTitle();
             String trackYear = id3v2Tag.getYear();
-            return new Mp3Details(filePath, fileName, trackArtist, trackName, trackYear, fileState);
+
+            return new Mp3Details(filePath, fileName, trackArtist, trackName, trackYear, fileState, patternCode);
         }
 
-        return new Mp3Details(filePath, fileName, null, null, null, fileState);
+        return new Mp3Details(filePath, fileName, null, null, null, fileState, patternCode);
     }
 
     public String getFilePath() {
@@ -92,6 +94,14 @@ public class Mp3Details {
         return fileState;
     }
 
+    public String getFilePattern() {
+        return filePattern.get();
+    }
+
+    public StringProperty filePatternProperty() {
+        return filePattern;
+    }
+
     public void setFilePath(String filePath) {
         this.filePath.set(filePath);
     }
@@ -114,6 +124,10 @@ public class Mp3Details {
 
     public void setFileState(String fileState) {
         this.fileState.set(fileState);
+    }
+
+    public void setFilePattern(String filePattern) {
+        this.filePattern.set(filePattern);
     }
 
 }
