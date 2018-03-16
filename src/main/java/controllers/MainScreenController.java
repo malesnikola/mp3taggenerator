@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -41,6 +42,7 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
     private Mp3Model mp3Model;
 
     private Scene scene;
+    private String choosenLanguage;
     private ResourceBundle resourceBundle;
     private Task saveFilesWorker;
 
@@ -55,6 +57,10 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
     private MenuItem openFilesMenuItem;
     @FXML
     private MenuItem openFolderMenuItem;
+    @FXML
+    private CheckMenuItem englishMenuItem;
+    @FXML
+    private CheckMenuItem serbianMenuItem;
 
     // labels
     @FXML
@@ -127,6 +133,8 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
         try {
             openFilesMenuItem.setText(resourceBundle.getString("menu.item.openfiles.text"));
             openFolderMenuItem.setText(resourceBundle.getString("menu.item.openfolder.text"));
+            englishMenuItem.setText(resourceBundle.getString("menu.item.english.text"));
+            serbianMenuItem.setText(resourceBundle.getString("menu.item.serbian.text"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -134,7 +142,8 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
         // labels
         try {
             chooseAlphabetLabel.setText(resourceBundle.getString("label.choosealphabet.text"));
-            choosePatternLabel.setText(resourceBundle.getString("label.choosepattern.text"));
+            String val = resourceBundle.getString("label.choosepattern.text");
+            choosePatternLabel.setText(new String(val.getBytes("ISO-8859-1"), "cp1250"));
             consoleLabel.setText(resourceBundle.getString("label.console.text"));
         } catch (Exception e) {
             e.printStackTrace();
@@ -178,10 +187,28 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
         }
     }
 
+    public void englishMenuItemCheckChanged(ActionEvent e){
+        resourceBundle = ResourceBundle.getBundle("main.resources.bundles.Bundle", new Locale("en", "EN"));
+        choosenLanguage = "en";
+        englishMenuItem.setSelected(true);
+        serbianMenuItem.setSelected(false);
+        populateUIWithLocalizedStrings();
+    }
+
+    public void serbianMenuItemCheckChanged(ActionEvent e){
+        resourceBundle = ResourceBundle.getBundle("main.resources.bundles.Bundle", new Locale("rs", "RS"));
+        choosenLanguage = "rs";
+        englishMenuItem.setSelected(false);
+        serbianMenuItem.setSelected(true);
+        populateUIWithLocalizedStrings();
+    }
+
     @FXML
     public void initialize() {
         mp3Model.registerObserver(this);
         resourceBundle = ResourceBundle.getBundle("main.resources.bundles.Bundle", new Locale("en", "EN"));
+        choosenLanguage = "en";
+        englishMenuItem.setSelected(true);
 
         tableView.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE

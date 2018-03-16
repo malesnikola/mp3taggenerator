@@ -34,8 +34,8 @@
           </Menu>
           <Menu fx:id="languageMenu" mnemonicParsing="false" text="Language">
                <items>
-                  <CheckMenuItem mnemonicParsing="false" text="Unspecified Action" />
-                  <CheckMenuItem mnemonicParsing="false" text="Unspecified Action" />
+                  <CheckMenuItem fx:id="englishMenuItem" mnemonicParsing="false" onAction="#englishMenuItemCheckChanged" text="English" />
+                  <CheckMenuItem fx:id="serbianMenuItem" mnemonicParsing="false" onAction="#serbianMenuItemCheckChanged" text="Serbian" />
                </items>
           </Menu>
         </menus>
