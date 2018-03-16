@@ -38,6 +38,7 @@ public class Mp3FileWrapper extends Mp3File {
     }
 
     public enum Mp3FilePattern {
+        UNKNOWN("unknown"),
         ARTIST_YEAR_TITLE("A-Y-T"),
         ARTIST_LIVE_YEAR_TITLE("A-L-Y-T"),
         ARTIST_TITLE("A-T"),
@@ -60,7 +61,7 @@ public class Mp3FileWrapper extends Mp3File {
     public Mp3FileWrapper(String filename) throws IOException, UnsupportedTagException, InvalidDataException {
         super(filename);
         this.state = Mp3FileState.SAVED;
-        this.pattern = Mp3FilePattern.ARTIST_YEAR_TITLE;
+        this.pattern = Mp3FilePattern.UNKNOWN;
     }
 
     public Mp3FileWrapper(String filename, Mp3FileState state) throws IOException, UnsupportedTagException, InvalidDataException {
