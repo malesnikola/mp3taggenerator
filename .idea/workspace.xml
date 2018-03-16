@@ -7,12 +7,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/workers/GenerateTagsWorker.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/workers/SaveFilesWorker.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/controllers/MainScreenController.java" afterPath="$PROJECT_DIR$/src/main/java/controllers/MainScreenController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/domain/Mp3FileWrapper.java" afterPath="$PROJECT_DIR$/src/main/java/domain/Mp3FileWrapper.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/model/Mp3Model.java" afterPath="$PROJECT_DIR$/src/main/java/model/Mp3Model.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/service/Mp3Service.java" afterPath="$PROJECT_DIR$/src/main/java/service/Mp3Service.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/workers/GenerateTagsWorker.java" afterPath="$PROJECT_DIR$/src/main/java/workers/GenerateTagsWorker.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/view/screen_main.fxml" afterPath="$PROJECT_DIR$/src/main/resources/view/screen_main.fxml" />
     </list>
     <ignored path="JavaFxApplication.iws" />
@@ -79,7 +78,7 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/main/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="37">
+            <state relative-caret-position="0">
               <caret line="18" column="51" lean-forward="false" selection-start-line="18" selection-start-column="51" selection-end-line="18" selection-end-column="51" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -88,13 +87,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MainScreenController.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="MainScreenController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/controllers/MainScreenController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="519">
-              <caret line="410" column="12" lean-forward="false" selection-start-line="410" selection-start-column="12" selection-end-line="410" selection-end-column="12" />
+            <state relative-caret-position="171">
+              <caret line="316" column="32" lean-forward="true" selection-start-line="316" selection-start-column="32" selection-end-line="316" selection-end-column="32" />
               <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="e#5255#6401#0" expanded="true" />
+                <element signature="e#6400#6401#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -103,8 +103,8 @@
       <file leaf-file-name="GenerateTagsWorker.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/workers/GenerateTagsWorker.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="12" column="59" lean-forward="false" selection-start-line="12" selection-start-column="59" selection-end-line="12" selection-end-column="59" />
+            <state relative-caret-position="315">
+              <caret line="19" column="11" lean-forward="false" selection-start-line="19" selection-start-column="11" selection-end-line="19" selection-end-column="11" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -115,7 +115,7 @@
       <file leaf-file-name="ProgressForm.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/controllers/ProgressForm.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-337">
+            <state relative-caret-position="68">
               <caret line="14" column="13" lean-forward="false" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
               <folding />
             </state>
@@ -125,8 +125,8 @@
       <file leaf-file-name="ImportFilesWorker.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/workers/ImportFilesWorker.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="275">
-              <caret line="21" column="44" lean-forward="true" selection-start-line="21" selection-start-column="44" selection-end-line="21" selection-end-column="44" />
+            <state relative-caret-position="255">
+              <caret line="21" column="44" lean-forward="false" selection-start-line="21" selection-start-column="44" selection-end-line="21" selection-end-column="44" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -137,7 +137,7 @@
       <file leaf-file-name="SaveFilesWorker.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/workers/SaveFilesWorker.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="476">
+            <state relative-caret-position="374">
               <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -149,80 +149,50 @@
       <file leaf-file-name="Mp3Model.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/model/Mp3Model.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="885">
-              <caret line="226" column="59" lean-forward="false" selection-start-line="226" selection-start-column="59" selection-end-line="226" selection-end-column="59" />
+            <state relative-caret-position="484">
+              <caret line="160" column="52" lean-forward="false" selection-start-line="160" selection-start-column="52" selection-end-line="160" selection-end-column="52" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#1486#1487#0" expanded="true" />
-                <element signature="e#1531#1532#0" expanded="true" />
-                <element signature="e#1803#1804#0" expanded="true" />
-                <element signature="e#1840#1841#0" expanded="true" />
-                <element signature="e#6852#6853#0" expanded="true" />
-                <element signature="e#6891#6892#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Mp3Service.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/service/Mp3Service.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="392">
+              <caret line="113" column="25" lean-forward="false" selection-start-line="113" selection-start-column="25" selection-end-line="113" selection-end-column="25" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="screen_main.fxml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/resources/view/screen_main.fxml">
-          <provider selected="true" editor-type-id="JavaFX-Scene-Builder">
-            <state />
-          </provider>
           <provider editor-type-id="text-editor">
             <state relative-caret-position="391">
               <caret line="23" column="254" lean-forward="false" selection-start-line="23" selection-start-column="254" selection-end-line="23" selection-end-column="254" />
               <folding>
-                <marker date="1520964588430" expanded="true" signature="2691:11166" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="2714:10431" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="2748:2876" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="2748:3423" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="3454:3574" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="3600:10407" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="3742:5853" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="3782:3919" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="3956:4203" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="4235:5489" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="4347:4534" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="4392:4501" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="4638:5456" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="4676:5154" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="4804:5009" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="4851:4964" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="5199:5298" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="5335:5424" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="5525:5597" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="5628:5709" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="5748:5823" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="5946:6610" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="5973:6086" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="6117:6221" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="6251:6578" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="6374:6547" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="6411:6509" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="6853:7233" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="6884:7205" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="6994:7173" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="7029:7136" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="7431:10407" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="7490:7865" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="7521:7837" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="7631:7805" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="7666:7768" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="7931:9773" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="7971:8108" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="8145:8392" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="8424:9743" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="8527:9420" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="8565:9244" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="9289:9388" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="9533:9710" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="9578:9677" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="10532:11145" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="10556:11030" ph="..." />
-                <marker date="1520964588430" expanded="true" signature="11060:11120" ph="..." />
+                <marker date="1521208192869" expanded="true" signature="2748:2876" ph="..." />
+                <marker date="1521208192869" expanded="true" signature="7431:10529" ph="..." />
+                <marker date="1521208192869" expanded="true" signature="8711:8888" ph="..." />
+                <marker date="1521208192869" expanded="true" signature="8758:8874" ph="..." />
+                <marker date="1521208192869" expanded="true" signature="9411:9510" ph="..." />
+                <marker date="1521208192869" expanded="true" signature="9655:9832" ph="..." />
+                <marker date="1521208192869" expanded="true" signature="9700:9799" ph="..." />
+                <marker date="1521208192869" expanded="true" signature="10122:10502" ph="..." />
+                <marker date="1521208192869" expanded="true" signature="10153:10474" ph="..." />
+                <marker date="1521208192869" expanded="true" signature="10263:10442" ph="..." />
+                <marker date="1521208192869" expanded="true" signature="10298:10405" ph="..." />
+                <marker date="1521208192869" expanded="true" signature="10654:11267" ph="..." />
+                <marker date="1521208192869" expanded="true" signature="10678:11152" ph="..." />
+                <marker date="1521208192869" expanded="true" signature="11182:11242" ph="..." />
               </folding>
             </state>
+          </provider>
+          <provider selected="true" editor-type-id="JavaFX-Scene-Builder">
+            <state />
           </provider>
         </entry>
       </file>
@@ -238,8 +208,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>genera</find>
-      <find>IllegalArgumentException</find>
       <find>buffer</find>
       <find>clear</find>
       <find>mp3Repository</find>
@@ -266,6 +234,10 @@
       <find>start(</find>
       <find>start()</find>
       <find>saveFilesWorker</find>
+      <find>importedFiles</find>
+      <find>ARTIST_YEAR_TITLE</find>
+      <find>patter</find>
+      <find>pattern</find>
     </findStrings>
   </component>
   <component name="FindManager">
@@ -304,7 +276,6 @@
         <option value="$PROJECT_DIR$/src/main/java/repositories/Mp3Model.java" />
         <option value="$PROJECT_DIR$/src/main/java/util/FileHelper.java" />
         <option value="$PROJECT_DIR$/src/main/java/util/Mp3Service.java" />
-        <option value="$PROJECT_DIR$/src/main/java/service/Mp3Service.java" />
         <option value="$PROJECT_DIR$/src/main/java/main/Main.java" />
         <option value="$PROJECT_DIR$/src/main/java/workers/ImportFilesWorker.java" />
         <option value="$PROJECT_DIR$/src/main/java/workers/progress.css" />
@@ -314,11 +285,12 @@
         <option value="$PROJECT_DIR$/src/main/java/domain/StateImage.java" />
         <option value="$PROJECT_DIR$/src/main/java/domain/Mp3Details.java" />
         <option value="$PROJECT_DIR$/src/main/java/domain/Mp3FileWrapper.java" />
-        <option value="$PROJECT_DIR$/src/main/java/workers/GenerateTagsWorker.java" />
-        <option value="$PROJECT_DIR$/src/main/java/model/Mp3Model.java" />
-        <option value="$PROJECT_DIR$/src/main/resources/view/screen_main.fxml" />
         <option value="$PROJECT_DIR$/src/main/java/workers/SaveFilesWorker.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/view/screen_main.fxml" />
+        <option value="$PROJECT_DIR$/src/main/java/workers/GenerateTagsWorker.java" />
         <option value="$PROJECT_DIR$/src/main/java/controllers/MainScreenController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/model/Mp3Model.java" />
+        <option value="$PROJECT_DIR$/src/main/java/service/Mp3Service.java" />
       </list>
     </option>
   </component>
@@ -347,9 +319,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="AndroidView" />
+      <pane id="PackagesPane" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -472,7 +444,7 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -679,7 +651,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32969433" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21428572" sideWeight="0.6703755" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.11130952" sideWeight="0.6703755" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -727,13 +699,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_144/javafx-src.zip!/javafx/stage/DirectoryChooser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="355">
-          <caret line="101" column="16" lean-forward="false" selection-start-line="101" selection-start-column="16" selection-end-line="101" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$PROJECT_DIR$/../libraries/mp3agic.jar!/com/mpatric/mp3agic/ID3v24Tag.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
@@ -780,13 +745,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="397">
           <caret line="184" column="0" lean-forward="false" selection-start-line="184" selection-start-column="0" selection-end-line="184" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_144/src.zip!/java/util/Map.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="138" column="8" lean-forward="false" selection-start-line="138" selection-start-column="8" selection-end-line="138" selection-end-column="8" />
         </state>
       </provider>
     </entry>
@@ -1003,56 +961,38 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/domain/Mp3Details.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="19" column="44" lean-forward="false" selection-start-line="19" selection-start-column="33" selection-end-line="19" selection-end-column="44" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/workers/ImportFilesWorker.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="275">
-          <caret line="21" column="44" lean-forward="true" selection-start-line="21" selection-start-column="44" selection-end-line="21" selection-end-column="44" />
+        <state relative-caret-position="255">
+          <caret line="21" column="44" lean-forward="false" selection-start-line="21" selection-start-column="44" selection-end-line="21" selection-end-column="44" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/service/Mp3Service.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="632">
-          <caret line="69" column="25" lean-forward="false" selection-start-line="69" selection-start-column="25" selection-end-line="69" selection-end-column="25" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/controllers/ProgressForm.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-337">
+        <state relative-caret-position="68">
           <caret line="14" column="13" lean-forward="false" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/domain/Mp3FileWrapper.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/main/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="34" lean-forward="false" selection-start-line="15" selection-start-column="34" selection-end-line="15" selection-end-column="34" />
+        <state relative-caret-position="0">
+          <caret line="18" column="51" lean-forward="false" selection-start-line="18" selection-start-column="51" selection-end-line="18" selection-end-column="51" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/workers/GenerateTagsWorker.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/workers/SaveFilesWorker.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="59" lean-forward="false" selection-start-line="12" selection-start-column="59" selection-end-line="12" selection-end-column="59" />
+        <state relative-caret-position="374">
+          <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1067,88 +1007,52 @@
         <state relative-caret-position="391">
           <caret line="23" column="254" lean-forward="false" selection-start-line="23" selection-start-column="254" selection-end-line="23" selection-end-column="254" />
           <folding>
-            <marker date="1520964588430" expanded="true" signature="2691:11166" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="2714:10431" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="2748:2876" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="2748:3423" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="3454:3574" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="3600:10407" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="3742:5853" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="3782:3919" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="3956:4203" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="4235:5489" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="4347:4534" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="4392:4501" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="4638:5456" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="4676:5154" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="4804:5009" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="4851:4964" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="5199:5298" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="5335:5424" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="5525:5597" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="5628:5709" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="5748:5823" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="5946:6610" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="5973:6086" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="6117:6221" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="6251:6578" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="6374:6547" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="6411:6509" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="6853:7233" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="6884:7205" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="6994:7173" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="7029:7136" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="7431:10407" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="7490:7865" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="7521:7837" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="7631:7805" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="7666:7768" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="7931:9773" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="7971:8108" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="8145:8392" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="8424:9743" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="8527:9420" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="8565:9244" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="9289:9388" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="9533:9710" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="9578:9677" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="10532:11145" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="10556:11030" ph="..." />
-            <marker date="1520964588430" expanded="true" signature="11060:11120" ph="..." />
+            <marker date="1521208192869" expanded="true" signature="2748:2876" ph="..." />
+            <marker date="1521208192869" expanded="true" signature="7431:10529" ph="..." />
+            <marker date="1521208192869" expanded="true" signature="8711:8888" ph="..." />
+            <marker date="1521208192869" expanded="true" signature="8758:8874" ph="..." />
+            <marker date="1521208192869" expanded="true" signature="9411:9510" ph="..." />
+            <marker date="1521208192869" expanded="true" signature="9655:9832" ph="..." />
+            <marker date="1521208192869" expanded="true" signature="9700:9799" ph="..." />
+            <marker date="1521208192869" expanded="true" signature="10122:10502" ph="..." />
+            <marker date="1521208192869" expanded="true" signature="10153:10474" ph="..." />
+            <marker date="1521208192869" expanded="true" signature="10263:10442" ph="..." />
+            <marker date="1521208192869" expanded="true" signature="10298:10405" ph="..." />
+            <marker date="1521208192869" expanded="true" signature="10654:11267" ph="..." />
+            <marker date="1521208192869" expanded="true" signature="10678:11152" ph="..." />
+            <marker date="1521208192869" expanded="true" signature="11182:11242" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/main/Main.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/domain/Mp3FileWrapper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="37">
-          <caret line="18" column="51" lean-forward="false" selection-start-line="18" selection-start-column="51" selection-end-line="18" selection-end-column="51" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="170">
+          <caret line="15" column="34" lean-forward="false" selection-start-line="15" selection-start-column="34" selection-end-line="15" selection-end-column="34" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/model/Mp3Model.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/domain/Mp3Details.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="885">
-          <caret line="226" column="59" lean-forward="false" selection-start-line="226" selection-start-column="59" selection-end-line="226" selection-end-column="59" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1486#1487#0" expanded="true" />
-            <element signature="e#1531#1532#0" expanded="true" />
-            <element signature="e#1803#1804#0" expanded="true" />
-            <element signature="e#1840#1841#0" expanded="true" />
-            <element signature="e#6852#6853#0" expanded="true" />
-            <element signature="e#6891#6892#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="68">
+          <caret line="12" column="13" lean-forward="false" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/workers/SaveFilesWorker.java">
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_144/src.zip!/java/util/Map.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+        <state relative-caret-position="288">
+          <caret line="341" column="18" lean-forward="false" selection-start-line="341" selection-start-column="18" selection-end-line="341" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/workers/GenerateTagsWorker.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="19" column="11" lean-forward="false" selection-start-line="19" selection-start-column="11" selection-end-line="19" selection-end-column="11" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1157,11 +1061,38 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/controllers/MainScreenController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="519">
-          <caret line="410" column="12" lean-forward="false" selection-start-line="410" selection-start-column="12" selection-end-line="410" selection-end-column="12" />
+        <state relative-caret-position="171">
+          <caret line="316" column="32" lean-forward="true" selection-start-line="316" selection-start-column="32" selection-end-line="316" selection-end-column="32" />
+          <folding>
+            <element signature="e#5255#6401#0" expanded="true" />
+            <element signature="e#6400#6401#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/model/Mp3Model.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="484">
+          <caret line="160" column="52" lean-forward="false" selection-start-line="160" selection-start-column="52" selection-end-line="160" selection-end-column="52" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_144/src.zip!/java/lang/String.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="280">
+          <caret line="1924" column="18" lean-forward="false" selection-start-line="1924" selection-start-column="18" selection-end-line="1924" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/service/Mp3Service.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="392">
+          <caret line="113" column="25" lean-forward="false" selection-start-line="113" selection-start-column="25" selection-end-line="113" selection-end-column="25" />
+          <folding />
         </state>
       </provider>
     </entry>

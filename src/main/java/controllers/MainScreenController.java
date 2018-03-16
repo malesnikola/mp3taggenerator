@@ -53,6 +53,14 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
     private Scene scene;
 
     @FXML
+    private RadioButton artistYearTitleRadButton;
+    @FXML
+    private RadioButton artistLiveYearTitleRadButton;
+    @FXML
+    private RadioButton artistTitleRadButton;
+    @FXML
+    private RadioButton titleRadButton;
+    @FXML
     private RadioButton cyrillicRadioButton;
     @FXML
     private ScrollPane scrollPane;
@@ -69,6 +77,7 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
     private TableColumn<Mp3Details, String> trackName;
     @FXML
     private TableColumn<Mp3Details, String> trackYear;
+    private TableColumn<Mp3Details, String> pattern;
     @FXML
     private ProgressBar progressBar;
 
@@ -125,11 +134,11 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
             }
         });
 
-        TableColumn patternColumn = new TableColumn("Pattern");
-        patternColumn.setStyle("-fx-alignment: CENTER;");
-        patternColumn.setCellValueFactory(new PropertyValueFactory<Mp3Details,String>("filePattern"));
+        pattern = new TableColumn("Pattern");
+        pattern.setStyle("-fx-alignment: CENTER;");
+        pattern.setCellValueFactory(new PropertyValueFactory<Mp3Details,String>("filePattern"));
 
-        tableView.getColumns().add(patternColumn);
+        tableView.getColumns().add(pattern);
 
         TableColumn stateColumn = new TableColumn("State");
         stateColumn.setCellValueFactory(new PropertyValueFactory<Mp3Details,String>("fileState"));
@@ -251,7 +260,28 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
 
     public void generateTags() {
         ProgressForm progressForm = new ProgressForm(scene);
-        Task generateTagsWorker = new GenerateTagsWorker(mp3Model, progressForm, cyrillicRadioButton.isSelected());
+
+        Mp3FileWrapper.Mp3FilePattern pattern;
+        if (artistYearTitleRadButton.isSelected()) {
+            pattern = Mp3FileWrapper.Mp3FilePattern.ARTIST_YEAR_TITLE;
+        } else if (artistLiveYearTitleRadButton.isSelected()) {
+            pattern = Mp3FileWrapper.Mp3FilePattern.ARTIST_LIVE_YEAR_TITLE;
+        } else if (artistTitleRadButton.isSelected()) {
+            pattern = Mp3FileWrapper.Mp3FilePattern.ARTIST_TITLE;
+        } else {
+            pattern = Mp3FileWrapper.Mp3FilePattern.TITLE;
+        }
+
+        boolean isCyrillicTags = cyrillicRadioButton.isSelected();
+        List<String> selectedFilesPath = null;
+        ObservableList<Mp3Details> selectedItems = tableView.getSelectionModel().getSelectedItems();
+        if (selectedItems.size() > 0) {
+            selectedFilesPath = selectedItems.stream()
+                    .map(Mp3Details::getFilePath)
+                    .collect(Collectors.toList());
+        }
+
+        Task generateTagsWorker = new GenerateTagsWorker(mp3Model, progressForm, pattern, isCyrillicTags, selectedFilesPath);
 
         // binds progress of progress bars to progress of task:
         progressForm.activateProgressBar(generateTagsWorker);
@@ -295,6 +325,7 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
         trackArtist.setCellValueFactory(new PropertyValueFactory<>("trackArtist"));
         trackName.setCellValueFactory(new PropertyValueFactory<>("trackName"));
         trackYear.setCellValueFactory(new PropertyValueFactory<>("trackYear"));
+        pattern.setCellValueFactory(new PropertyValueFactory<>("filePattern"));
 
         tableView.setItems(null);
         tableView.setItems(tableData);

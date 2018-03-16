@@ -134,11 +134,11 @@ public class Mp3Model {
         }
     }
 
-    public void generateTagsForImportedFiles(boolean isCyrillicTags) {
-        generateTagsForImportedFiles(isCyrillicTags, null);
+    public void generateTagsForImportedFiles(Mp3FileWrapper.Mp3FilePattern pattern, boolean isCyrillicTags, GenerateTagsWorker worker) {
+        generateTagsForImportedFiles(pattern, isCyrillicTags, worker, null);
     }
 
-    public void generateTagsForImportedFiles(boolean isCyrillicTags, GenerateTagsWorker worker) {
+    public void generateTagsForImportedFiles(Mp3FileWrapper.Mp3FilePattern pattern, boolean isCyrillicTags, GenerateTagsWorker worker, List<String> selectedFilesPath) {
         lastFailedGeneratingTags = new LinkedList<>();
 
         if (importedFiles.size() > 0) {
@@ -148,8 +148,16 @@ public class Mp3Model {
         AtomicInteger progress = new AtomicInteger();
         long maxProgress = importedFiles.size();
 
-        importedFiles.values().parallelStream().forEach(file -> {
+        Collection<Mp3FileWrapper> selectedFiles = importedFiles.values();
+        if (selectedFilesPath != null && selectedFilesPath.size() > 0) {
+            List<Mp3FileWrapper> listOfSelectedMp3Files = new LinkedList<>();
+            selectedFilesPath.forEach(path -> listOfSelectedMp3Files.add(importedFiles.get(path)));
+            selectedFiles = listOfSelectedMp3Files;
+        }
+
+        selectedFiles.parallelStream().forEach(file -> {
             try {
+                file.setPattern(pattern);
                 ID3v2 id3v2Tag = Mp3Service.crateID3v2Tag(file, isCyrillicTags);
                 file.removeId3v2Tag();
                 file.setId3v2Tag(id3v2Tag);

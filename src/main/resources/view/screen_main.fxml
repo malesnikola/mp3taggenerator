@@ -159,13 +159,13 @@
                      <children>
                         <VBox prefHeight="79.0" prefWidth="265.0" spacing="5.0" GridPane.rowIndex="1">
                            <children>
-                              <RadioButton mnemonicParsing="false" selected="true" text="Artist - Year - Title">
+                              <RadioButton fx:id="artistYearTitleRadButton" mnemonicParsing="false" selected="true" text="Artist - Year - Title">
                                  <toggleGroup>
                                     <ToggleGroup fx:id="pattern" />
                                  </toggleGroup></RadioButton>
-                              <RadioButton mnemonicParsing="false" text="Artist - Live - Year - Title" toggleGroup="$pattern" />
-                              <RadioButton mnemonicParsing="false" text="Artist - Title" toggleGroup="$pattern" />
-                              <RadioButton mnemonicParsing="false" text="Title" toggleGroup="$pattern" />
+                              <RadioButton fx:id="artistLiveYearTitleRadButton" mnemonicParsing="false" text="Artist - Live - Year - Title" toggleGroup="$pattern" />
+                              <RadioButton fx:id="artistTitleRadButton" mnemonicParsing="false" text="Artist - Title" toggleGroup="$pattern" />
+                              <RadioButton fx:id="titleRadButton" mnemonicParsing="false" text="Title" toggleGroup="$pattern" />
                            </children>
                            <GridPane.margin>
                               <Insets left="10.0" />

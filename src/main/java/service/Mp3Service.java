@@ -3,6 +3,7 @@ package main.java.service;
 import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.ID3v23Tag;
 import com.mpatric.mp3agic.Mp3File;
+import main.java.domain.Mp3FileWrapper;
 import main.java.exceptions.FileNameBadFormatException;
 import main.java.util.Constants;
 import org.apache.log4j.Logger;
@@ -72,33 +73,122 @@ public class Mp3Service {
         return name.substring(name.lastIndexOf("."));
     }
 
-    public static ID3v2 crateID3v2Tag(Mp3File file, boolean isCyrillicTags) throws FileNameBadFormatException {
+    /***
+     *
+     * @param name Represent name
+     * @param appearance Represent number of appearance of character for search which is interested
+     * @param characterForSearch Represent character which index is search in name
+     * @return
+     */
+    private static int getIndexOf(String name, int appearance, char characterForSearch) {
+        for (int i = 0; i < name.length(); i++) {
+            char currChar = name.charAt(i);
+            if ((currChar == characterForSearch) && (--appearance == 0)) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    private static String getArtistFromFileNameAndPattern(String fileName, Mp3FileWrapper.Mp3FilePattern pattern) throws FileNameBadFormatException {
+        switch (pattern) {
+            case ARTIST_YEAR_TITLE:
+            case ARTIST_TITLE:
+                int firstIndexOfDash = getIndexOf(fileName, 1, '-');
+                if (firstIndexOfDash == -1) {
+                    throw new FileNameBadFormatException("File name has bad format for pattern: " + pattern.getPatternCode());
+                }
+
+                return fileName.substring(0, firstIndexOfDash).trim();
+
+            case ARTIST_LIVE_YEAR_TITLE:
+                int secondIndexOfDash = getIndexOf(fileName, 2, '-');
+                if (secondIndexOfDash == -1) {
+                    throw new FileNameBadFormatException("File name has bad format for pattern: " + pattern.getPatternCode());
+                }
+
+                return fileName.substring(0, secondIndexOfDash).trim();
+
+            default:
+                return "";
+        }
+    }
+
+    private static String getYearFromFileNameAndPattern(String fileName, Mp3FileWrapper.Mp3FilePattern pattern) throws FileNameBadFormatException {
+        switch (pattern) {
+            case ARTIST_YEAR_TITLE:
+                int firstIndexOfDash = getIndexOf(fileName, 1, '-');
+                int secondIndexOfDash = getIndexOf(fileName, 2, '-');
+                if ((firstIndexOfDash == -1) || (secondIndexOfDash == -1)) {
+                    throw new FileNameBadFormatException("File name has bad format for pattern: " + pattern.getPatternCode());
+                }
+
+                return fileName.substring((firstIndexOfDash + 1), secondIndexOfDash).trim();
+
+            case ARTIST_LIVE_YEAR_TITLE:
+                secondIndexOfDash = getIndexOf(fileName, 2, '-');
+                int thirdIndexOfDash = getIndexOf(fileName, 3, '-');
+                if ((secondIndexOfDash == -1) || (thirdIndexOfDash == -1)) {
+                    throw new FileNameBadFormatException("File name has bad format for pattern: " + pattern.getPatternCode());
+                }
+
+                return fileName.substring((secondIndexOfDash + 1), thirdIndexOfDash).trim();
+
+            default:
+                return "";
+        }
+    }
+
+    private static String getTitleFromFileNameAndPattern(String fileName, Mp3FileWrapper.Mp3FilePattern pattern) throws FileNameBadFormatException {
+        switch (pattern) {
+            case ARTIST_YEAR_TITLE:
+                int secondIndexOfDash = getIndexOf(fileName, 2, '-');
+                if (secondIndexOfDash == -1) {
+                    throw new FileNameBadFormatException("File name has bad format for pattern: " + pattern.getPatternCode());
+                }
+
+                return fileName.substring(secondIndexOfDash + 1).trim();
+
+            case ARTIST_TITLE:
+                int firstIndexOfDash = getIndexOf(fileName, 1, '-');
+                if (firstIndexOfDash == -1) {
+                    throw new FileNameBadFormatException("File name has bad format for pattern: " + pattern.getPatternCode());
+                }
+
+                return fileName.substring(firstIndexOfDash + 1).trim();
+
+            case ARTIST_LIVE_YEAR_TITLE:
+                int thirdIndexOfDash = getIndexOf(fileName, 3, '-');
+                if (thirdIndexOfDash == -1) {
+                    throw new FileNameBadFormatException("File name has bad format for pattern: " + pattern.getPatternCode());
+                }
+
+                return fileName.substring(thirdIndexOfDash + 1).trim();
+
+            default:
+                return fileName.trim();
+        }
+    }
+
+    public static ID3v2 crateID3v2Tag(Mp3FileWrapper file, boolean isCyrillicTags) throws FileNameBadFormatException {
         String filePath = file.getFilename();
         String fileName = filePath.substring(filePath.lastIndexOf(File.separator) + 1);
         fileName = fileName.substring(0, fileName.lastIndexOf('.'));
-        String[] fileParts = fileName.split("-");
-        if (fileParts.length < 2 || fileParts.length > 4) {
-            throw new FileNameBadFormatException("File nam has bad format. Valid format is Artist - Year - Title.mp3");
-        }
 
-        String artistName = fileParts[0].trim();
-        String titleName = fileParts[fileParts.length - 1].trim();
-        String year = (fileParts.length == 3 ? fileParts[1].trim() : "");
-        if(fileParts.length == 4) {
-            // TODO optimizuj ovaj upit i prethodne definicije
-            artistName = fileParts[0].trim() + " - " + fileParts[1].trim();
-            year = fileParts[2].trim();
-        }
+        String artist = getArtistFromFileNameAndPattern(fileName, file.getPattern());
+        String year = getYearFromFileNameAndPattern(fileName, file.getPattern());
+        String title = getTitleFromFileNameAndPattern(fileName, file.getPattern());
 
-        if (isCyrillicTags && !(artistName.contains("y") || artistName.contains("Y") || artistName.contains("MC") || artistName.contains("y"))
-                           && !(titleName.contains("y") || titleName.contains("Y") || titleName.contains("MC") || titleName.contains("y"))) {   // TODO stavi ovo u posebnu metodu
-            artistName = translate(artistName);
-            titleName = translate(titleName);
+        if (isCyrillicTags && !(artist.contains("y") || artist.contains("Y") || artist.contains("MC"))
+                           && !(title.contains("y") || title.contains("Y") || title.contains("MC"))) {
+            artist = translate(artist);
+            title = translate(title);
         }
 
         ID3v2 id3v2Tag = new ID3v23Tag();
-        id3v2Tag.setArtist(artistName);
-        id3v2Tag.setTitle(titleName);
+        id3v2Tag.setArtist(artist);
+        id3v2Tag.setTitle(title);
         id3v2Tag.setYear(year);
 
         return id3v2Tag;
