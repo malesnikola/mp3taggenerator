@@ -1,6 +1,5 @@
 package main.java.controllers;
 
-import com.mpatric.mp3agic.Mp3File;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,21 +10,16 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
-import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
-import javafx.stage.Modality;
 import javafx.util.Callback;
 import main.java.domain.FailedFileDetails;
 import main.java.domain.Mp3Details;
 import main.java.domain.Mp3FileWrapper;
-import main.java.domain.StateImage;
 import main.java.model.Mp3Model;
 import main.java.util.Constants;
 import main.java.service.Mp3Service;
@@ -36,12 +30,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import javafx.scene.control.TableColumn;
 
-import javax.swing.plaf.nimbus.State;
 import java.io.File;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -74,10 +64,11 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
     @FXML
     private TableColumn<Mp3Details, String> trackArtist;
     @FXML
-    private TableColumn<Mp3Details, String> trackName;
-    @FXML
     private TableColumn<Mp3Details, String> trackYear;
-    private TableColumn<Mp3Details, String> pattern;
+    @FXML
+    private TableColumn<Mp3Details, String> trackName;
+    private TableColumn<Mp3Details, String> patternColumn;
+
     @FXML
     private ProgressBar progressBar;
 
@@ -92,12 +83,15 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
 
     private ObservableList<Mp3Details> tableData;
 
+    private ResourceBundle resourceBundle;
+
     // test speed
     long longerTime = 0;
 
     @FXML
     public void initialize() {
         mp3Model.registerObserver(this);
+        resourceBundle = ResourceBundle.getBundle("main.resources.bundles.Bundle", new Locale("rs", "rs"));
 
         tableView.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
@@ -134,13 +128,18 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
             }
         });
 
-        pattern = new TableColumn("Pattern");
-        pattern.setStyle("-fx-alignment: CENTER;");
-        pattern.setCellValueFactory(new PropertyValueFactory<Mp3Details,String>("filePattern"));
+        fileName.setText(resourceBundle.getString("table.column.file.path.text"));
+        trackArtist.setText(resourceBundle.getString("table.column.artist.text"));
+        trackYear.setText(resourceBundle.getString("table.column.year.text"));
+        trackName.setText(resourceBundle.getString("table.column.title.text"));
 
-        tableView.getColumns().add(pattern);
+        patternColumn = new TableColumn(resourceBundle.getString("table.column.pattern.text"));
+        patternColumn.setStyle("-fx-alignment: CENTER;");
+        patternColumn.setCellValueFactory(new PropertyValueFactory<Mp3Details,String>("filePattern"));
 
-        TableColumn stateColumn = new TableColumn("State");
+        tableView.getColumns().add(patternColumn);
+
+        TableColumn stateColumn = new TableColumn(resourceBundle.getString("table.column.state.text"));
         stateColumn.setCellValueFactory(new PropertyValueFactory<Mp3Details,String>("fileState"));
 
         // ** The TableCell class has the method setTextFill(Paint p) that you
@@ -161,12 +160,19 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
 
                             switch (state) {
                                 case SAVED:
+                                    this.setText("");
                                     this.setTextFill(Color.GREEN);
                                     break;
                                 case MODIFIED:
+                                    this.setText(resourceBundle.getString("modified"));
                                     this.setTextFill(Color.BLUE);
                                     break;
+                                case FAILED_MODIFIED:
+                                    this.setText(resourceBundle.getString("failed.modified"));
+                                    this.setTextFill(Color.RED);
+                                    break;
                                 case FAILED_SAVED:
+                                    this.setText(resourceBundle.getString("failed.saved"));
                                     this.setTextFill(Color.RED);
                                     break;
                             }
@@ -325,7 +331,7 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
         trackArtist.setCellValueFactory(new PropertyValueFactory<>("trackArtist"));
         trackName.setCellValueFactory(new PropertyValueFactory<>("trackName"));
         trackYear.setCellValueFactory(new PropertyValueFactory<>("trackYear"));
-        pattern.setCellValueFactory(new PropertyValueFactory<>("filePattern"));
+        patternColumn.setCellValueFactory(new PropertyValueFactory<>("filePattern"));
 
         tableView.setItems(null);
         tableView.setItems(tableData);
