@@ -30,7 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import javafx.scene.control.TableColumn;
 
-import java.io.File;
+import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -41,7 +41,30 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
     private Mp3Model mp3Model;
 
     private Scene scene;
+    private ResourceBundle resourceBundle;
+    private Task saveFilesWorker;
 
+    // menu
+    @FXML
+    private Menu fileMenu;
+    @FXML
+    private Menu languageMenu;
+
+    // menu items
+    @FXML
+    private MenuItem openFilesMenuItem;
+    @FXML
+    private MenuItem openFolderMenuItem;
+
+    // labels
+    @FXML
+    private Label chooseAlphabetLabel;
+    @FXML
+    private Label choosePatternLabel;
+    @FXML
+    private Label consoleLabel;
+
+    // radio buttons
     @FXML
     private RadioButton artistYearTitleRadButton;
     @FXML
@@ -53,10 +76,18 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
     @FXML
     private RadioButton cyrillicRadioButton;
     @FXML
-    private ScrollPane scrollPane;
-    @FXML
-    private TextFlow infoArea;
+    private RadioButton latinRadioButton;
 
+    // buttons
+    @FXML
+    private Button generateButton;
+    @FXML
+    private Button saveButton;
+    @FXML
+    private Button stopButton;
+
+    // data table
+    private ObservableList<Mp3Details> tableData;
     @FXML
     private TableView<Mp3Details> tableView;
     @FXML
@@ -68,30 +99,89 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
     @FXML
     private TableColumn<Mp3Details, String> trackName;
     private TableColumn<Mp3Details, String> patternColumn;
+    private TableColumn stateColumn;
 
+    // text flow
+    @FXML
+    private ScrollPane scrollPane;
+    @FXML
+    private TextFlow infoArea;
+
+    // progress bar
     @FXML
     private ProgressBar progressBar;
-
-    private Task saveFilesWorker;
-
-    @FXML
-    private Button generateButton;
-    @FXML
-    private Button startButton;
-    @FXML
-    private Button stopButton;
-
-    private ObservableList<Mp3Details> tableData;
-
-    private ResourceBundle resourceBundle;
 
     // test speed
     long longerTime = 0;
 
+    private void populateUIWithLocalizedStrings() {
+        // menu
+        try {
+            fileMenu.setText(resourceBundle.getString("menu.file.text"));
+            languageMenu.setText(resourceBundle.getString("menu.language.text"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // menu items
+        try {
+            openFilesMenuItem.setText(resourceBundle.getString("menu.item.openfiles.text"));
+            openFolderMenuItem.setText(resourceBundle.getString("menu.item.openfolder.text"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // labels
+        try {
+            chooseAlphabetLabel.setText(resourceBundle.getString("label.choosealphabet.text"));
+            choosePatternLabel.setText(resourceBundle.getString("label.choosepattern.text"));
+            consoleLabel.setText(resourceBundle.getString("label.console.text"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // radio buttons
+        try {
+            String val = resourceBundle.getString("radio.button.cyrillic.text");
+            cyrillicRadioButton.setText(new String(val.getBytes("ISO-8859-1"), "cp1250"));
+            latinRadioButton.setText(resourceBundle.getString("radio.button.latin.text"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // buttons
+        try {
+            String val = resourceBundle.getString("button.generate.text");
+            generateButton.setText(new String(val.getBytes("ISO-8859-1"), "cp1250"));
+            val = resourceBundle.getString("button.save.text");
+            saveButton.setText(new String(val.getBytes("ISO-8859-1"), "cp1250"));
+            stopButton.setText(resourceBundle.getString("button.stop.text"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // columns on data table
+        try {
+            fileName.setText(resourceBundle.getString("table.column.filepath.text"));
+            trackArtist.setText(resourceBundle.getString("table.column.artist.text"));
+            trackYear.setText(resourceBundle.getString("table.column.year.text"));
+            trackName.setText(resourceBundle.getString("table.column.title.text"));
+            String val = resourceBundle.getString("table.column.pattern.text");
+            patternColumn.setText(new String(val.getBytes("ISO-8859-1"), "cp1250"));
+            stateColumn.setText(resourceBundle.getString("table.column.state.text"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @FXML
     public void initialize() {
         mp3Model.registerObserver(this);
-        resourceBundle = ResourceBundle.getBundle("main.resources.bundles.Bundle", new Locale("rs", "rs"));
+        resourceBundle = ResourceBundle.getBundle("main.resources.bundles.Bundle", new Locale("en", "EN"));
 
         tableView.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
@@ -128,18 +218,12 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
             }
         });
 
-        fileName.setText(resourceBundle.getString("table.column.file.path.text"));
-        trackArtist.setText(resourceBundle.getString("table.column.artist.text"));
-        trackYear.setText(resourceBundle.getString("table.column.year.text"));
-        trackName.setText(resourceBundle.getString("table.column.title.text"));
-
         patternColumn = new TableColumn(resourceBundle.getString("table.column.pattern.text"));
         patternColumn.setStyle("-fx-alignment: CENTER;");
         patternColumn.setCellValueFactory(new PropertyValueFactory<Mp3Details,String>("filePattern"));
-
         tableView.getColumns().add(patternColumn);
 
-        TableColumn stateColumn = new TableColumn(resourceBundle.getString("table.column.state.text"));
+        stateColumn = new TableColumn(resourceBundle.getString("table.column.state.text"));
         stateColumn.setCellValueFactory(new PropertyValueFactory<Mp3Details,String>("fileState"));
 
         // ** The TableCell class has the method setTextFill(Paint p) that you
@@ -160,19 +244,15 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
 
                             switch (state) {
                                 case SAVED:
-                                    this.setText("");
                                     this.setTextFill(Color.GREEN);
                                     break;
                                 case MODIFIED:
-                                    this.setText(resourceBundle.getString("modified"));
                                     this.setTextFill(Color.BLUE);
                                     break;
                                 case FAILED_MODIFIED:
-                                    this.setText(resourceBundle.getString("failed.modified"));
                                     this.setTextFill(Color.RED);
                                     break;
                                 case FAILED_SAVED:
-                                    this.setText(resourceBundle.getString("failed.saved"));
                                     this.setTextFill(Color.RED);
                                     break;
                             }
@@ -189,6 +269,7 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
 
         tableView.getColumns().add(stateColumn);
 
+        populateUIWithLocalizedStrings();
     }
 
     public void setScene(Scene scene) {
@@ -305,7 +386,7 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
         progressBar.progressProperty().bind(saveFilesWorker.progressProperty());
 
         generateButton.setDisable(true);
-        startButton.setDisable(true);
+        saveButton.setDisable(true);
         stopButton.setDisable(false);
 
         // open progress dialog
@@ -443,7 +524,7 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
             progressBar.progressProperty().unbind();
             progressBar.setProgress(0);
             generateButton.setDisable(false);
-            startButton.setDisable(false);
+            saveButton.setDisable(false);
             stopButton.setDisable(true);
             saveFilesWorker = null;
         });
