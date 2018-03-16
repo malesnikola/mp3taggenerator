@@ -188,19 +188,25 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
     }
 
     public void englishMenuItemCheckChanged(ActionEvent e){
-        resourceBundle = ResourceBundle.getBundle("main.resources.bundles.Bundle", new Locale("en", "EN"));
-        choosenLanguage = "en";
+        if (!"en".equals(choosenLanguage)) {
+            resourceBundle = ResourceBundle.getBundle("main.resources.bundles.Bundle", new Locale("en", "EN"));
+            choosenLanguage = "en";
+            serbianMenuItem.setSelected(false);
+            populateUIWithLocalizedStrings();
+        }
+
         englishMenuItem.setSelected(true);
-        serbianMenuItem.setSelected(false);
-        populateUIWithLocalizedStrings();
     }
 
     public void serbianMenuItemCheckChanged(ActionEvent e){
-        resourceBundle = ResourceBundle.getBundle("main.resources.bundles.Bundle", new Locale("rs", "RS"));
-        choosenLanguage = "rs";
-        englishMenuItem.setSelected(false);
+        if (!"rs".equals(choosenLanguage)) {
+            resourceBundle = ResourceBundle.getBundle("main.resources.bundles.Bundle", new Locale("rs", "RS"));
+            choosenLanguage = "rs";
+            englishMenuItem.setSelected(false);
+            populateUIWithLocalizedStrings();
+        }
+
         serbianMenuItem.setSelected(true);
-        populateUIWithLocalizedStrings();
     }
 
     @FXML
