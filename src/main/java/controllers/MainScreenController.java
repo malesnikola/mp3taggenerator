@@ -245,6 +245,7 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
 
         // create state column
         stateColumn = new TableColumn(getLocalizedString("table.column.state.text"));
+        stateColumn.setPrefWidth(100);
         stateColumn.setCellValueFactory(new PropertyValueFactory<Mp3Details,String>("fileState"));
 
         // add cell factory for coloring states:

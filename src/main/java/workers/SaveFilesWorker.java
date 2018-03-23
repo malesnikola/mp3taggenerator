@@ -11,13 +11,6 @@ public class SaveFilesWorker extends Task<Boolean> {
     public SaveFilesWorker(Mp3Model mp3Model, ProgressBar progressBar) {
         super();
         this.mp3Model = mp3Model;
-        this.setOnCancelled(event -> {
-            //progressBar.setProgress(0);
-        });
-
-        this.setOnSucceeded(event -> {
-            //progressBar.setProgress(0);
-        });
     }
 
     @Override

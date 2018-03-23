@@ -6,7 +6,6 @@ import main.java.domain.Mp3FileWrapper;
 import main.java.enums.Mp3FilePattern;
 import main.java.exceptions.FileNameBadFormatException;
 import main.java.util.Constants;
-import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -14,12 +13,24 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Service for manipulation with ".mp3" files.
+ */
 public class Mp3Service {
-
-    private static Logger logger = Logger.getLogger(Mp3Service.class);
+    /**
+     * All possible cyrillic letters and marks.
+     */
     private static String[] abcCyr = {" ", ".", "!", "%", "'", "-", "&", ",", "(", ")", "а", "б", "в", "г", "д", "ђ", "е", "ж", "з", "и", "ј", "к", "л", "љ",  "м", "н", "њ",  "о", "п", "р", "с", "т", "ћ", "у", "ф", "х", "ц", "ч", "џ",  "ш", "А", "Б", "В", "Г", "Д", "Ђ", "Е", "Ж", "З", "И", "Ј", "К", "Л", "Љ",  "М", "Н", "Њ",  "О", "П", "Р", "С", "Т", "Ћ", "У", "Ф", "Х", "Ц", "Ч", "Џ",  "Ш", "a", "b", "v", "g", "d", "đ", "e", "ž", "z", "i", "j", "k", "l", "lj", "m", "n", "nj", "o", "p", "r", "s", "t", "ć", "u", "f", "h", "c", "č", "dž", "š", "x",  "A", "B", "V", "G", "D", "Đ", "E", "Ž", "Z", "I", "J", "K", "L", "Lj", "M", "N", "Nj", "O", "P", "R", "S", "T", "Ć", "U", "F", "H", "C", "Č", "Dž", "Š", "X",  "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"};
+    /**
+     * All possible latin letters and marks.
+     */
     private static String[] abcLat = {" ", ".", "!", "%", "'", "-", "&", ",", "(", ")", "a", "b", "v", "g", "d", "đ", "e", "ž", "z", "i", "j", "k", "l", "lj", "m", "n", "nj", "o", "p", "r", "s", "t", "ć", "u", "f", "h", "c", "č", "dž", "š", "A", "B", "V", "G", "D", "Đ", "E", "Ž", "Z", "I", "J", "K", "L", "Lj", "M", "N", "Nj", "O", "P", "R", "S", "T", "Ć", "U", "F", "H", "C", "Č", "Dž", "Š", "а", "б", "в", "г", "д", "ђ", "е", "ж", "з", "и", "ј", "к", "л", "љ",  "м", "н", "њ",  "о", "п", "р", "с", "т", "ћ", "у", "ф", "х", "ц", "ч", "џ",  "ш", "кс", "А", "Б", "В", "Г", "Д", "Ђ", "Е", "Ж", "З", "И", "Ј", "К", "Л", "Љ",  "М", "Н", "Њ",  "О", "П", "Р", "С", "Т", "Ћ", "У", "Ф", "Х", "Ц", "Ч", "Џ",  "Ш", "КС", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"};
 
+    /**
+     * Translate message from latin to cyrillic letters.
+     * @param message Original latin message.
+     * @return
+     */
     @NotNull
     private static String translate(String message) {
         StringBuilder builder = new StringBuilder();
@@ -66,6 +77,11 @@ public class Mp3Service {
         return builder.toString();
     }
 
+    /**
+     * Get extension from file.
+     * @param file File.
+     * @return Returns extension of fole (e.g. ".mp3")
+     */
     @NotNull
     public static String getFileExtension(File file) {
         String name = file.getName();
@@ -73,11 +89,12 @@ public class Mp3Service {
     }
 
     /***
-     *
-     * @param name Represent name
-     * @param appearance Represent number of appearance of character for search which is interested
-     * @param characterForSearch Represent character which index is search in name
-     * @return
+     * Get index of interested appearance of character.
+     * For example: getIndexOf("A - B - C", 2, '-') returns 6, because second appearance of '-' is on index 6 (between B and C).
+     * @param name Represent name.
+     * @param appearance Represent number of appearance of character for search which is interested.
+     * @param characterForSearch Represent character which index is search in name.
+     * @return Index of interested appearance of character.
      */
     private static int getIndexOf(String name, int appearance, char characterForSearch) {
         for (int i = 0; i < name.length(); i++) {
@@ -90,6 +107,13 @@ public class Mp3Service {
         return -1;
     }
 
+    /**
+     * Get artist from file name based on file pattern.
+     * @param fileName File name.
+     * @param pattern Selected pattern (e.g. "A-Y-T").
+     * @return Returns string which represent artist.
+     * @throws FileNameBadFormatException If file name has bad format for selected pattern.
+     */
     private static String getArtistFromFileNameAndPattern(String fileName, Mp3FilePattern pattern) throws FileNameBadFormatException {
         switch (pattern) {
             case ARTIST_YEAR_TITLE:
@@ -114,6 +138,13 @@ public class Mp3Service {
         }
     }
 
+    /**
+     * Get year from file name based on file pattern.
+     * @param fileName File name.
+     * @param pattern Selected pattern (e.g. "A-Y-T").
+     * @return Returns string which represent year.
+     * @throws FileNameBadFormatException If file name has bad format for selected pattern.
+     */
     private static String getYearFromFileNameAndPattern(String fileName, Mp3FilePattern pattern) throws FileNameBadFormatException {
         switch (pattern) {
             case ARTIST_YEAR_TITLE:
@@ -139,6 +170,13 @@ public class Mp3Service {
         }
     }
 
+    /**
+     * Get title from file name based on file pattern.
+     * @param fileName File name.
+     * @param pattern Selected pattern (e.g. "A-Y-T").
+     * @return Returns string which represent title.
+     * @throws FileNameBadFormatException If file name has bad format for selected pattern.
+     */
     private static String getTitleFromFileNameAndPattern(String fileName, Mp3FilePattern pattern) throws FileNameBadFormatException {
         switch (pattern) {
             case ARTIST_YEAR_TITLE:
@@ -170,6 +208,14 @@ public class Mp3Service {
         }
     }
 
+    /**
+     * Create ID3v2 tag for forwarded ".mp3" file.
+     * Cyrillic tags for files which name contains 'y' or 'MC' are not possible. In that case, tags will always be latin.
+     * @param file Mp3FileWrapper
+     * @param isCyrillicTags Indicates if tags has to be cyrillic.
+     * @return Returns created ID3v2 tags.
+     * @throws FileNameBadFormatException If file name has bad format for selected pattern.
+     */
     public static ID3v2 crateID3v2Tag(Mp3FileWrapper file, boolean isCyrillicTags) throws FileNameBadFormatException {
         String filePath = file.getFilename();
         String fileName = filePath.substring(filePath.lastIndexOf(File.separator) + 1);
@@ -193,6 +239,11 @@ public class Mp3Service {
         return id3v2Tag;
     }
 
+    /**
+     * Check does list contains any file with ".mp3" extension.
+     * @param files List with files.
+     * @return Returns true if contains, else false.
+     */
     public static boolean ifContainsAnyMp3File(List<File> files) {
         for (File file : files) {
             if (Constants.MP3_FILE_TYPE_EXTENSION.equalsIgnoreCase(getFileExtension(file))) {
@@ -201,19 +252,6 @@ public class Mp3Service {
         }
 
         return false;
-    }
-
-    public static List<File> getAllMp3Files(List<File> files) {
-        List<File> mp3Files = Collections.synchronizedList(new ArrayList<>());
-        if (files != null) {
-            files.parallelStream().forEach(file -> {
-                if (Constants.MP3_FILE_TYPE_EXTENSION.equalsIgnoreCase(getFileExtension(file))) {
-                    mp3Files.add(file);
-                }
-            });
-        }
-
-        return mp3Files;
     }
 
 }
