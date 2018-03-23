@@ -27,6 +27,7 @@ import main.java.service.Mp3Service;
 import main.java.workers.GenerateTagsWorker;
 import main.java.workers.ImportFilesWorker;
 import main.java.workers.SaveFilesWorker;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import javafx.scene.control.TableColumn;
@@ -38,13 +39,16 @@ import java.util.stream.Collectors;
 @Component
 public class MainScreenController implements Mp3Model.Mp3FilesObserver {
 
+    private static Logger logger = Logger.getLogger(MainScreenController.class);
+
     @Autowired
     private Mp3Model mp3Model;
 
     private Scene scene;
-    private String choosenLanguage;
+    private String chosenLanguage; // en (English), rs (Serbian)
     private ResourceBundle resourceBundle;
     private Task saveFilesWorker;
+    private TableColumn chosenSortingColumn;
 
     // menu
     @FXML
@@ -119,112 +123,75 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
     @FXML
     private ProgressBar progressBar;
 
-    // test speed
-    long longerTime = 0;
+    /**
+     * Get localized string from Bundle_{chosenLanguage}.properties in charset cp1250 (because of Serbian latin letters).
+     * @param key Key of the required string.
+     * @return Returns value of localized sting if exist, else returns empty string.
+     */
+    private String getLocalizedString(String key) {
+        try {
+            String value = resourceBundle.getString(key);
+            return new String(value.getBytes("ISO-8859-1"), "cp1250");
+        } catch (Exception e) {
+            logger.debug("Exception in method getLocalizedString: " + e.getMessage());
+            return "";
+        }
+    }
 
+    /**
+     * Populate UI element with localized strings from Bundle_{chosenLanguage}.properties.
+     */
     private void populateUIWithLocalizedStrings() {
         // menu
-        try {
-            fileMenu.setText(resourceBundle.getString("menu.file.text"));
-            languageMenu.setText(resourceBundle.getString("menu.language.text"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        fileMenu.setText(getLocalizedString("menu.file.text"));
+        languageMenu.setText(getLocalizedString("menu.language.text"));
 
         // menu items
-        try {
-            openFilesMenuItem.setText(resourceBundle.getString("menu.item.openfiles.text"));
-            openFolderMenuItem.setText(resourceBundle.getString("menu.item.openfolder.text"));
-            englishMenuItem.setText(resourceBundle.getString("menu.item.english.text"));
-            serbianMenuItem.setText(resourceBundle.getString("menu.item.serbian.text"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        openFilesMenuItem.setText(getLocalizedString("menu.item.openfiles.text"));
+        openFolderMenuItem.setText(getLocalizedString("menu.item.openfolder.text"));
+        englishMenuItem.setText(getLocalizedString("menu.item.english.text"));
+        serbianMenuItem.setText(getLocalizedString("menu.item.serbian.text"));
 
         // labels
-        try {
-            chooseAlphabetLabel.setText(resourceBundle.getString("label.choosealphabet.text"));
-            String val = resourceBundle.getString("label.choosepattern.text");
-            choosePatternLabel.setText(new String(val.getBytes("ISO-8859-1"), "cp1250"));
-            consoleLabel.setText(resourceBundle.getString("label.console.text"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        chooseAlphabetLabel.setText(getLocalizedString("label.choosealphabet.text"));
+        choosePatternLabel.setText(getLocalizedString("label.choosepattern.text"));
+        consoleLabel.setText(getLocalizedString("label.console.text"));
 
         // radio buttons
-        try {
-            String val = resourceBundle.getString("radio.button.cyrillic.text");
-            cyrillicRadioButton.setText(new String(val.getBytes("ISO-8859-1"), "cp1250"));
-            latinRadioButton.setText(resourceBundle.getString("radio.button.latin.text"));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        cyrillicRadioButton.setText(getLocalizedString("radio.button.cyrillic.text"));
+        latinRadioButton.setText(getLocalizedString("radio.button.latin.text"));
 
         // buttons
-        try {
-            String val = resourceBundle.getString("button.generate.text");
-            generateButton.setText(new String(val.getBytes("ISO-8859-1"), "cp1250"));
-            val = resourceBundle.getString("button.save.text");
-            saveButton.setText(new String(val.getBytes("ISO-8859-1"), "cp1250"));
-            stopButton.setText(resourceBundle.getString("button.stop.text"));
-            val = resourceBundle.getString("button.clearconsole.tooltip");
-            clearConsoleButton.setTooltip(new Tooltip(new String(val.getBytes("ISO-8859-1"), "cp1250")));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        generateButton.setText(getLocalizedString("button.generate.text"));
+        saveButton.setText(getLocalizedString("button.save.text"));
+        stopButton.setText(getLocalizedString("button.stop.text"));
+        clearConsoleButton.setTooltip(new Tooltip(getLocalizedString("button.clearconsole.tooltip")));
 
-        // columns on data table
-        try {
-            fileName.setText(resourceBundle.getString("table.column.filepath.text"));
-            trackArtist.setText(resourceBundle.getString("table.column.artist.text"));
-            trackYear.setText(resourceBundle.getString("table.column.year.text"));
-            trackName.setText(resourceBundle.getString("table.column.title.text"));
-            String val = resourceBundle.getString("table.column.pattern.text");
-            patternColumn.setText(new String(val.getBytes("ISO-8859-1"), "cp1250"));
-            stateColumn.setText(resourceBundle.getString("table.column.state.text"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+        // data table
+        tableView.setPlaceholder(new Label(getLocalizedString("table.placeholder.text")));
 
-    public void englishMenuItemCheckChanged(ActionEvent e){
-        if (!"en".equals(choosenLanguage)) {
-            resourceBundle = ResourceBundle.getBundle("main.resources.bundles.Bundle", new Locale("en", "EN"));
-            choosenLanguage = "en";
-            serbianMenuItem.setSelected(false);
-            populateUIWithLocalizedStrings();
-        }
-
-        englishMenuItem.setSelected(true);
-    }
-
-    public void serbianMenuItemCheckChanged(ActionEvent e){
-        if (!"rs".equals(choosenLanguage)) {
-            resourceBundle = ResourceBundle.getBundle("main.resources.bundles.Bundle", new Locale("rs", "RS"));
-            choosenLanguage = "rs";
-            englishMenuItem.setSelected(false);
-            populateUIWithLocalizedStrings();
-        }
-
-        serbianMenuItem.setSelected(true);
+        // columns in data table
+        fileName.setText(getLocalizedString("table.column.filepath.text"));
+        trackArtist.setText(getLocalizedString("table.column.artist.text"));
+        trackYear.setText(getLocalizedString("table.column.year.text"));
+        trackName.setText(getLocalizedString("table.column.title.text"));
+        patternColumn.setText(getLocalizedString("table.column.pattern.text"));
+        stateColumn.setText(getLocalizedString("table.column.state.text"));
     }
 
     @FXML
     public void initialize() {
         mp3Model.registerObserver(this);
+
+        // by default, languague is English
         resourceBundle = ResourceBundle.getBundle("main.resources.bundles.Bundle", new Locale("en", "EN"));
-        choosenLanguage = "en";
+        chosenLanguage = "en";
         englishMenuItem.setSelected(true);
 
-        tableView.getSelectionModel().setSelectionMode(
-                SelectionMode.MULTIPLE
-        );
+        // enable multiple selection in table
+        tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-        // Add event handling for deleting multiple files
+        // add key event handling for deleting files and for clearing selection
         tableView.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
             switch (event.getCode()) {
                 case DELETE:
@@ -240,7 +207,7 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
             }
         });
 
-        // Clear selection in table view on clicking on empty rows
+        // add mouse event handling for clearing selection on empty row click
         tableView.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             Node source = event.getPickResult().getIntersectedNode();
 
@@ -255,20 +222,30 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
             }
         });
 
-        patternColumn = new TableColumn(resourceBundle.getString("table.column.pattern.text"));
+        // save user selected column for sorting
+        tableView.setOnSort(event -> {
+            if (tableView.getSortOrder().size() == 1) {
+                chosenSortingColumn = tableView.getSortOrder().get(0);
+            }
+        });
+
+        // by default sorting column is file name
+        fileName.setSortType(TableColumn.SortType.ASCENDING);
+        chosenSortingColumn = fileName;
+
+        // create and add pattern column
+        patternColumn = new TableColumn(getLocalizedString("table.column.pattern.text"));
         patternColumn.setStyle("-fx-alignment: CENTER;");
         patternColumn.setCellValueFactory(new PropertyValueFactory<Mp3Details,String>("filePattern"));
         tableView.getColumns().add(patternColumn);
 
-        stateColumn = new TableColumn(resourceBundle.getString("table.column.state.text"));
+        // create state column
+        stateColumn = new TableColumn(getLocalizedString("table.column.state.text"));
         stateColumn.setCellValueFactory(new PropertyValueFactory<Mp3Details,String>("fileState"));
 
-        // ** The TableCell class has the method setTextFill(Paint p) that you
-        // ** need to override the text color
-        //   To obtain the TableCell we need to replace the Default CellFactory
-        //   with one that returns a new TableCell instance,
+        // add cell factory for coloring states:
+        //   To obtain the TableCell we need to replace the Default CellFactory with one that returns a new TableCell instance,
         //   and @Override the updateItem(String item, boolean empty) method.
-        //
         stateColumn.setCellFactory(new Callback<TableColumn, TableCell>() {
             public TableCell call(TableColumn param) {
                 return new TableCell<Mp3Details, String>() {
@@ -304,18 +281,25 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
             }
         });
 
+        // add state column
         tableView.getColumns().add(stateColumn);
 
         populateUIWithLocalizedStrings();
     }
 
+    /**
+     * Set javafx scene.
+     * @param scene Javafx scene.
+     */
     public void setScene(Scene scene) {
         this.scene = scene;
 
+        // add drag over event handling
         scene.setOnDragOver(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
                 Dragboard db = event.getDragboard();
+                // if at least one of the dragged files has ".mp3" extension enable importing
                 if (db.hasFiles() && Mp3Service.ifContainsAnyMp3File(db.getFiles())) {
                     event.acceptTransferModes(TransferMode.COPY);
                 } else {
@@ -324,11 +308,10 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
             }
         });
 
-        // Dropping over surface
+        // add drop over event handling
         scene.setOnDragDropped(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
-
                 Dragboard db = event.getDragboard();
                 boolean success = false;
                 if (db.hasFiles()) {
@@ -338,13 +321,16 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
                     ProgressForm progressForm = new ProgressForm(scene);
                     Task importFilesWorker = new ImportFilesWorker(mp3Model, progressForm, dbFiles);
 
-                    // binds progress of progress bars to progress of task:
+                    // binds progress of progress form to progress of task
                     progressForm.activateProgressBar(importFilesWorker);
 
+                    // disable all elements on scene
                     scene.getRoot().getChildrenUnmodifiable().forEach(c -> c.setDisable(true));
 
                     // open progress dialog
                     progressForm.getDialogStage().show();
+
+                    // saveFiles new thread
                     new Thread(importFilesWorker).start();
                 }
 
@@ -354,9 +340,42 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
         });
     }
 
+    /**
+     * Set English as chosen language.
+     * @param e
+     */
+    public void englishMenuItemCheckChanged(ActionEvent e){
+        if (!"en".equals(chosenLanguage)) {
+            resourceBundle = ResourceBundle.getBundle("main.resources.bundles.Bundle", new Locale("en", "EN"));
+            chosenLanguage = "en";
+            serbianMenuItem.setSelected(false);
+            populateUIWithLocalizedStrings();
+        }
+
+        englishMenuItem.setSelected(true);
+    }
+
+    /**
+     * Set Serbian as chosen language.
+     * @param e
+     */
+    public void serbianMenuItemCheckChanged(ActionEvent e){
+        if (!"rs".equals(chosenLanguage)) {
+            resourceBundle = ResourceBundle.getBundle("main.resources.bundles.Bundle", new Locale("rs", "RS"));
+            chosenLanguage = "rs";
+            englishMenuItem.setSelected(false);
+            populateUIWithLocalizedStrings();
+        }
+
+        serbianMenuItem.setSelected(true);
+    }
+
+    /**
+     * Open file chooser dialog and import selected files into mp3Model.
+     */
     public void openFiles() {
         FileChooser fileChooser = new FileChooser();
-        // Set extension filter
+        // set extension filter
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(Constants.MP3_FILE_TYPE_DESCRIPTION, "*" + Constants.MP3_FILE_TYPE_EXTENSION);
         fileChooser.getExtensionFilters().add(extFilter);
         // Open dialog for choosing mp3 files
@@ -366,6 +385,9 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
         }
     }
 
+    /**
+     * Open directory chooser dialog and import all ".mp3" files from chosen directory into mp3Model.
+     */
     public void openFolder() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         File selectedDirectory = directoryChooser.showDialog(tableView.getScene().getWindow());
@@ -382,6 +404,10 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
         }
     }
 
+    /**
+     * Generate tags for selected files in table according to chosen pattern and alphabet.
+     * If there is no selected files, generate tags for all files.
+     */
     public void generateTags() {
         ProgressForm progressForm = new ProgressForm(scene);
 
@@ -407,40 +433,50 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
 
         Task generateTagsWorker = new GenerateTagsWorker(mp3Model, progressForm, pattern, isCyrillicTags, selectedFilesPath);
 
-        // binds progress of progress bars to progress of task:
+        // binds progress of progress form to progress of task:
         progressForm.activateProgressBar(generateTagsWorker);
 
+        // disable all elements on scene
         scene.getRoot().getChildrenUnmodifiable().forEach(c -> c.setDisable(true));
 
         // open progress dialog
         progressForm.getDialogStage().show();
+
+        // saveFiles new thread
         new Thread(generateTagsWorker).start();
     }
 
-    public void start() {
+    /**
+     * Save all imported files on disk with same path.
+     */
+    public void saveFiles() {
         saveFilesWorker = new SaveFilesWorker(mp3Model, progressBar);
 
+        // binds progress of progress bar to progress of task:
         progressBar.progressProperty().bind(saveFilesWorker.progressProperty());
 
         generateButton.setDisable(true);
         saveButton.setDisable(true);
         stopButton.setDisable(false);
 
-        // open progress dialog
+        // start new thread
         new Thread(saveFilesWorker).start();
     }
 
+    /**
+     * Stop saving imported files. This is not recommended.
+     */
     public void stop() {
         if (saveFilesWorker != null) {
             saveFilesWorker.cancel();
         }
-
-        //onSavedImportedFiles();
     }
 
+    /**
+     * Update table view with data.
+     */
     private void updateTable() {
         tableData = FXCollections.observableArrayList();
-        //mp3Model.getImportedFiles().values().parallelStream().forEach(f -> tableData.add(Mp3Details.deserialize(f)));
         for (Mp3FileWrapper mp3File : mp3Model.getImportedFiles().values()) {
             tableData.add(Mp3Details.deserialize(mp3File));
         }
@@ -454,9 +490,7 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
         tableView.setItems(null);
         tableView.setItems(tableData);
 
-        // Sort files by name ascending
-        fileName.setSortType(TableColumn.SortType.ASCENDING);
-        tableView.getSortOrder().add(fileName);
+        tableView.getSortOrder().add(chosenSortingColumn);
         tableView.sort();
     }
 
