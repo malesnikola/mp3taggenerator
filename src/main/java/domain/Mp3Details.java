@@ -10,14 +10,17 @@ import javafx.scene.image.ImageView;
 
 import java.io.File;
 
+/**
+ * This class is used to hold data for table view.
+ */
 public class Mp3Details {
-    private final StringProperty filePath;
-    private final StringProperty fileName;
+    private final StringProperty filePath;      // full file path
+    private final StringProperty fileName;      // only file name with extension
     private final StringProperty trackArtist;
     private final StringProperty trackName;
     private final StringProperty trackYear;
-    private final StringProperty fileState;
-    private final StringProperty filePattern;
+    private final StringProperty fileState;     // state of file (e.g. "saved")
+    private final StringProperty filePattern;   // pattern for file (e.g. "A-Y-T")
 
     private Mp3Details(String filePath, String fileName, String trackArtist, String trackName, String trackYear, String fileState, String filePattern) {
         this.filePath = new SimpleStringProperty(filePath);
@@ -29,6 +32,11 @@ public class Mp3Details {
         this.filePattern = new SimpleStringProperty(filePattern);
     }
 
+    /**
+     * Create new Mp3Details based on Mp3FileWrapper.
+     * @param file Mp3FileWrapper with populated data.
+     * @return returns new Mp3Details.
+     */
     public static Mp3Details deserialize(Mp3FileWrapper file) {
         String filePath = file.getFilename();
         String fileName = filePath.substring(filePath.lastIndexOf(File.separator) + 1);

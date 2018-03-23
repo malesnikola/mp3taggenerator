@@ -3,6 +3,9 @@ package main.java.model;
 import com.mpatric.mp3agic.*;
 import main.java.domain.FailedFileDetails;
 import main.java.domain.Mp3FileWrapper;
+import main.java.enums.Mp3FilePattern;
+import main.java.enums.FileState;
+import main.java.enums.Mp3ModelState;
 import main.java.exceptions.FileNameBadFormatException;
 import main.java.service.Mp3Service;
 import main.java.workers.GenerateTagsWorker;
@@ -19,65 +22,77 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 public class Mp3Model {
-
-    public enum Mp3ModelState {
-        NONE,
-        IMPORTED,
-        REMOVED,
-        GENRATED,
-        SAVED
-    }
-
     private static Logger logger = Logger.getLogger(Mp3Model.class);
 
+    /**
+     * Last model state represent last executed action (e.g. "saved" for saving).
+     */
     private Mp3ModelState lastModelState = Mp3ModelState.NONE;
 
+    /**
+     * Contains all imported ".mp3" files. Key is file path (full file name), value is Mp3FileWrapper.
+     */
     private Map<String, Mp3FileWrapper> importedFiles = new ConcurrentHashMap<>();
 
+    /**
+     * Contains list of all files (with error details) which cannot be imported.
+     */
     private List<FailedFileDetails> lastFailedLoadingFiles = Collections.synchronizedList(new ArrayList<>());
 
+    /**
+     * Contains list of all files (with error details) which cannot be saved.
+     */
     private List<FailedFileDetails> lastFailedSavingFiles = new LinkedList<>();
 
+    /**
+     * Contains list of all files (with error details) for which tags cannot be generated.
+     */
     private List<FailedFileDetails> lastFailedGeneratingTags = new LinkedList<>();
 
+    /**
+     * Contains set of registered observers.
+     */
     private Set<Mp3FilesObserver> observers = new HashSet<>();
 
+    /**
+     * Get all imported files.
+     * @return Returns ConcurrentHashMap where key is file path (full file name) and value is Mp3FileWrapper.
+     */
     public Map<String, Mp3FileWrapper> getImportedFiles() {
         return importedFiles;
     }
 
+    /**
+     * Get list of last failed loaded files.
+     * @return Returns list of all files (with error details) which cannot be imported.
+     */
     public List<FailedFileDetails> getLastFailedLoadingFiles() {
         return lastFailedLoadingFiles;
     }
 
+    /**
+     * Get list of last failed saved files.
+     * @return Returns list of all files (with error details) which cannot be saved.
+     */
     public List<FailedFileDetails> getLastFailedSavingFiles() {
         return lastFailedSavingFiles;
     }
 
+    /**
+     * Returns list of last failed generated files.
+     * @return List of all files (with error details) for which tags cannot be generated.
+     */
     public List<FailedFileDetails> getLastFailedGeneratingTags() {
         return lastFailedGeneratingTags;
     }
 
+    /**
+     * Get last state of Mp3Model.
+     * @return Returns last model state which represent last executed action (e.g. "saved" for saving).
+     */
     public Mp3ModelState getLastModelState() {
         return lastModelState;
     }
-
-//    public void importFile(File file){
-//        String filePath = file.getPath();
-//        if (!importedFiles.containsKey(filePath)) {
-//            try {
-//                Mp3FileWrapper newFile = new Mp3FileWrapper(filePath);
-//                importedFiles.put(filePath, newFile);
-//                observers.forEach(o -> o.onImportedFileChanged(newFile));
-//            } catch (IOException | UnsupportedTagException | InvalidDataException e) {
-//                logger.debug("Excepton in method importFiles: " + e.getMessage());
-//                lastFailedLoadingFiles.add(new FailedFileDetails(filePath, e.getMessage()));
-//            } catch (Exception e) {
-//                logger.debug("Unexpected excepton in method importFiles: " + e.getMessage());
-//                lastFailedLoadingFiles.add(new FailedFileDetails(filePath, "Unexpected excepton: " + e.getMessage()));
-//            }
-//        }
-//    }
 
     public void importFiles(List<File> files) {
         importFiles(files, null);
@@ -134,11 +149,11 @@ public class Mp3Model {
         }
     }
 
-    public void generateTagsForImportedFiles(Mp3FileWrapper.Mp3FilePattern pattern, boolean isCyrillicTags, GenerateTagsWorker worker) {
+    public void generateTagsForImportedFiles(Mp3FilePattern pattern, boolean isCyrillicTags, GenerateTagsWorker worker) {
         generateTagsForImportedFiles(pattern, isCyrillicTags, worker, null);
     }
 
-    public void generateTagsForImportedFiles(Mp3FileWrapper.Mp3FilePattern pattern, boolean isCyrillicTags, GenerateTagsWorker worker, List<String> selectedFilesPath) {
+    public void generateTagsForImportedFiles(Mp3FilePattern pattern, boolean isCyrillicTags, GenerateTagsWorker worker, List<String> selectedFilesPath) {
         lastFailedGeneratingTags = new LinkedList<>();
 
         if (importedFiles.size() > 0) {
@@ -161,15 +176,15 @@ public class Mp3Model {
                 ID3v2 id3v2Tag = Mp3Service.crateID3v2Tag(file, isCyrillicTags);
                 file.removeId3v2Tag();
                 file.setId3v2Tag(id3v2Tag);
-                file.setState(Mp3FileWrapper.Mp3FileState.MODIFIED);
+                file.setState(FileState.MODIFIED);
             } catch (FileNameBadFormatException e) {
                 logger.debug("Excepton in method generateTagsForImportedFiles: " + e.getMessage());
                 lastFailedGeneratingTags.add(new FailedFileDetails(file.getFilename(), "Failed to generate tags for file '" + file.getFilename() + "'. Reason: " + e.getMessage()));
-                file.setState(Mp3FileWrapper.Mp3FileState.FAILED_MODIFIED);
+                file.setState(FileState.FAILED_MODIFIED);
             } catch (Exception e) {
                 logger.debug("Unexpected excepton in method importFiles: " + e.getMessage());
                 lastFailedGeneratingTags.add(new FailedFileDetails(file.getFilename(), "Unexpected excepton: " + e.getMessage()));
-                file.setState(Mp3FileWrapper.Mp3FileState.FAILED_MODIFIED);
+                file.setState(FileState.FAILED_MODIFIED);
             }
 
             if (worker != null) {
@@ -199,18 +214,18 @@ public class Mp3Model {
             String modifiedFileName = originalFileName + ".modified";
             boolean isSuccess = false;
             try {
-                if (file.getState() != Mp3FileWrapper.Mp3FileState.SAVED && file.getState() != Mp3FileWrapper.Mp3FileState.FAILED_MODIFIED) {
+                if (file.getState() != FileState.SAVED && file.getState() != FileState.FAILED_MODIFIED) {
                     file.save(modifiedFileName);
                     isSuccess = true;
                 }
             } catch (IOException | NotSupportedException e) {
                 logger.debug("Excepton in method saveImportedFiles: " + e.getMessage());
                 lastFailedSavingFiles.add(new FailedFileDetails(originalFileName, e.getMessage()));
-                file.setState(Mp3FileWrapper.Mp3FileState.FAILED_SAVED);
+                file.setState(FileState.FAILED_SAVED);
             } catch (Exception e) {
                 logger.debug("Unexpected excepton in method importFiles: " + e.getMessage());
                 lastFailedSavingFiles.add(new FailedFileDetails(file.getFilename(), "Unexpected excepton: " + e.getMessage()));
-                file.setState(Mp3FileWrapper.Mp3FileState.FAILED_SAVED);
+                file.setState(FileState.FAILED_SAVED);
             }
 
             if (isSuccess) {
@@ -221,9 +236,9 @@ public class Mp3Model {
                 if (!isRenameSuccess) {
                     logger.debug("Excepton in method saveImportedFiles: " + "Failed to rename newly created file. Newly saved file is: " + modifiedFileName);
                     lastFailedSavingFiles.add(new FailedFileDetails(originalFileName, "Failed to rename newly created file. Newly saved file is: " + modifiedFileName));
-                    file.setState(Mp3FileWrapper.Mp3FileState.FAILED_SAVED);
+                    file.setState(FileState.FAILED_SAVED);
                 } else {
-                    file.setState(Mp3FileWrapper.Mp3FileState.SAVED);
+                    file.setState(FileState.SAVED);
                 }
             }
 

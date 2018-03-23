@@ -1,10 +1,8 @@
-package main.java.controllers;
+package main.java.dialogs;
 
 import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
@@ -12,13 +10,22 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 
+/**
+ * Progress form is dialog form with one indicator and bounded task.
+ * This for will update indicator according to the task, and close after task is finished.
+ * If user press 'ESCAPE' while task is working, task will be canceled and form will be closed.
+ */
 public class ProgressForm {
     private final Scene parentScene;
     private final Stage dialogStage;
-    //private final ProgressBar progressBar = new ProgressBar();
+
     private final ProgressIndicator progressIndicator = new ProgressIndicator();
     private Task<?> task;
 
+    /**
+     * Create new progress form
+     * @param parentStage Parent stage where progress form is called.
+     */
     public ProgressForm(Scene parentStage) {
         this.parentScene = parentStage;
         dialogStage = new Stage();
@@ -26,23 +33,19 @@ public class ProgressForm {
         dialogStage.setResizable(false);
         dialogStage.initModality(Modality.APPLICATION_MODAL);
 
-        //progressBar.setProgress(-1F);
+        // reset progress
         progressIndicator.setProgress(-1F);
-
-        /*final HBox hb = new HBox();
-        hb.setSpacing(5);
-        hb.setAlignment(Pos.CENTER);
-        hb.getChildren().addAll(progressBar, progressIndicator);*/
 
         Scene scene = new Scene(progressIndicator);
         dialogStage.setScene(scene);
         dialogStage.initStyle(StageStyle.TRANSPARENT);
+
+        // add key event handling to enable user to cancel task and close form
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
                 switch (event.getCode()) {
                     case ESCAPE:
-                        System.out.println("ESCCCCCCCCCCCcc");
                         if (task != null) {
                             task.cancel();
                         }
@@ -52,6 +55,7 @@ public class ProgressForm {
             }
         });
 
+        // disable closing form
         dialogStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent event) {
@@ -61,13 +65,19 @@ public class ProgressForm {
 
     }
 
+    /**
+     * Bind indicator with task progress.
+     * @param task Task
+     */
     public void activateProgressBar(final Task<?> task)  {
         this.task = task;
-        //progressBar.progressProperty().bind(task.progressProperty());
         progressIndicator.progressProperty().bind(task.progressProperty());
         dialogStage.show();
     }
 
+    /**
+     * Enable all parent elements and close dialog.
+     */
     public void closeDialogStage(){
         parentScene.getRoot().getChildrenUnmodifiable().forEach(c -> c.setDisable(false));
         dialogStage.close();

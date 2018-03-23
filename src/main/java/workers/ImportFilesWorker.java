@@ -1,9 +1,8 @@
 package main.java.workers;
 
 import javafx.concurrent.Task;
-import main.java.controllers.ProgressForm;
+import main.java.dialogs.ProgressForm;
 import main.java.model.Mp3Model;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
 import java.util.List;

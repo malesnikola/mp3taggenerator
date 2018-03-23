@@ -18,9 +18,13 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
+import main.java.dialogs.ProgressForm;
 import main.java.domain.FailedFileDetails;
 import main.java.domain.Mp3Details;
 import main.java.domain.Mp3FileWrapper;
+import main.java.enums.Mp3FilePattern;
+import main.java.enums.FileState;
+import main.java.enums.Mp3ModelState;
 import main.java.model.Mp3Model;
 import main.java.util.Constants;
 import main.java.service.Mp3Service;
@@ -171,7 +175,7 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
         tableView.setPlaceholder(new Label(getLocalizedString("table.placeholder.text")));
 
         // columns in data table
-        fileName.setText(getLocalizedString("table.column.filepath.text"));
+        fileName.setText(getLocalizedString("table.column.filename.text"));
         trackArtist.setText(getLocalizedString("table.column.artist.text"));
         trackYear.setText(getLocalizedString("table.column.year.text"));
         trackName.setText(getLocalizedString("table.column.title.text"));
@@ -254,7 +258,7 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
                     public void updateItem(String item, boolean empty) {
                         super.updateItem(item, empty);
                         if (!isEmpty()) {
-                            Mp3FileWrapper.Mp3FileState state = Mp3FileWrapper.Mp3FileState.fromString(item);
+                            FileState state = FileState.fromString(item);
 
                             switch (state) {
                                 case SAVED:
@@ -409,7 +413,7 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
                 + ((minutes < 10) ? ("0" + minutes) : minutes) + ":"
                 + ((seconds < 10) ? ("0" + seconds) : seconds) + " - ";
 
-        Mp3Model.Mp3ModelState modelLastState = mp3Model.getLastModelState();
+        Mp3ModelState modelLastState = mp3Model.getLastModelState();
         switch (modelLastState) {
             case IMPORTED:
                 if (mp3Model.getLastFailedLoadingFiles().size() > 0) {
@@ -465,7 +469,20 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
         // Open dialog for choosing mp3 files
         List<File> files = fileChooser.showOpenMultipleDialog(tableView.getScene().getWindow());
         if (files != null) {
-            mp3Model.importFiles(files);
+            ProgressForm progressForm = new ProgressForm(scene);
+            Task importFilesWorker = new ImportFilesWorker(mp3Model, progressForm, files);
+
+            // binds progress of progress form to progress of task
+            progressForm.activateProgressBar(importFilesWorker);
+
+            // disable all elements on scene
+            scene.getRoot().getChildrenUnmodifiable().forEach(c -> c.setDisable(true));
+
+            // open progress dialog
+            progressForm.getDialogStage().show();
+
+            // saveFiles new thread
+            new Thread(importFilesWorker).start();
         }
     }
 
@@ -484,7 +501,20 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
                 }
             }
 
-            mp3Model.importFiles(filesForImport);
+            ProgressForm progressForm = new ProgressForm(scene);
+            Task importFilesWorker = new ImportFilesWorker(mp3Model, progressForm, filesForImport);
+
+            // binds progress of progress form to progress of task
+            progressForm.activateProgressBar(importFilesWorker);
+
+            // disable all elements on scene
+            scene.getRoot().getChildrenUnmodifiable().forEach(c -> c.setDisable(true));
+
+            // open progress dialog
+            progressForm.getDialogStage().show();
+
+            // saveFiles new thread
+            new Thread(importFilesWorker).start();
         }
     }
 
@@ -495,15 +525,15 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
     public void generateTags() {
         ProgressForm progressForm = new ProgressForm(scene);
 
-        Mp3FileWrapper.Mp3FilePattern pattern;
+        Mp3FilePattern pattern;
         if (artistYearTitleRadButton.isSelected()) {
-            pattern = Mp3FileWrapper.Mp3FilePattern.ARTIST_YEAR_TITLE;
+            pattern = Mp3FilePattern.ARTIST_YEAR_TITLE;
         } else if (artistLiveYearTitleRadButton.isSelected()) {
-            pattern = Mp3FileWrapper.Mp3FilePattern.ARTIST_LIVE_YEAR_TITLE;
+            pattern = Mp3FilePattern.ARTIST_LIVE_YEAR_TITLE;
         } else if (artistTitleRadButton.isSelected()) {
-            pattern = Mp3FileWrapper.Mp3FilePattern.ARTIST_TITLE;
+            pattern = Mp3FilePattern.ARTIST_TITLE;
         } else {
-            pattern = Mp3FileWrapper.Mp3FilePattern.TITLE;
+            pattern = Mp3FilePattern.TITLE;
         }
 
         boolean isCyrillicTags = cyrillicRadioButton.isSelected();

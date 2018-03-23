@@ -2,11 +2,7 @@ package main.java.workers;
 
 import javafx.concurrent.Task;
 import javafx.scene.control.ProgressBar;
-import main.java.controllers.ProgressForm;
 import main.java.model.Mp3Model;
-
-import java.io.File;
-import java.util.List;
 
 public class SaveFilesWorker extends Task<Boolean> {
 

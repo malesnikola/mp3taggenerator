@@ -3,80 +3,38 @@ package main.java.domain;
 import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.UnsupportedTagException;
-import org.jetbrains.annotations.Contract;
+import main.java.enums.Mp3FilePattern;
+import main.java.enums.FileState;
 
 import java.io.IOException;
 
+/**
+ * Mp3FileWrapper contains all information about ".mp3" file.
+ */
 public class Mp3FileWrapper extends Mp3File {
-
-    public enum Mp3FileState {
-        SAVED ("saved"),
-        MODIFIED("modified"),
-        FAILED_MODIFIED("failed modified"),
-        FAILED_SAVED("failed saved");
-
-        private String stateText;
-
-        Mp3FileState(String stateText) {
-            this.stateText = stateText;
-        }
-
-        @Contract(pure = true)
-        public String getStateText() {
-            return stateText;
-        }
-
-        public static Mp3FileState fromString(String text) {
-            for (Mp3FileState b : Mp3FileState.values()) {
-                if (b.stateText.equalsIgnoreCase(text)) {
-                    return b;
-                }
-            }
-
-            return null;
-        }
-    }
-
-    public enum Mp3FilePattern {
-        UNKNOWN("unknown"),
-        ARTIST_YEAR_TITLE("A-Y-T"),
-        ARTIST_LIVE_YEAR_TITLE("A-L-Y-T"),
-        ARTIST_TITLE("A-T"),
-        TITLE("T");
-
-        private String patternCode;
-
-        Mp3FilePattern(String patternCode) {
-            this.patternCode = patternCode;
-        }
-
-        public String getPatternCode() {
-            return patternCode;
-        }
-    }
-
-    private Mp3FileState state;
+    /**
+     * State of ".mp3" file. E.g. "SAVED".
+     */
+    private FileState state;
+    /**
+     * Pattern of ".mp3" file. E.g. "A-Y-T"
+     */
     private Mp3FilePattern pattern;
 
+    /**
+     * Create new Mp3FileWrapper based on full file name.
+     * @param filename Full path of file.
+     * @throws IOException
+     * @throws UnsupportedTagException
+     * @throws InvalidDataException
+     */
     public Mp3FileWrapper(String filename) throws IOException, UnsupportedTagException, InvalidDataException {
         super(filename);
-        this.state = Mp3FileState.SAVED;
+        this.state = FileState.SAVED;
         this.pattern = Mp3FilePattern.UNKNOWN;
     }
 
-    public Mp3FileWrapper(String filename, Mp3FileState state) throws IOException, UnsupportedTagException, InvalidDataException {
-        super(filename);
-        this.state = state;
-        this.pattern = Mp3FilePattern.ARTIST_YEAR_TITLE;
-    }
-
-    public Mp3FileWrapper(String filename, Mp3FileState state, Mp3FilePattern pattern) throws IOException, UnsupportedTagException, InvalidDataException {
-        super(filename);
-        this.state = state;
-        this.pattern = pattern;
-    }
-
-    public void setState(Mp3FileState state) {
+    public void setState(FileState state) {
         this.state = state;
     }
 
@@ -84,7 +42,7 @@ public class Mp3FileWrapper extends Mp3File {
         this.pattern = pattern;
     }
 
-    public Mp3FileState getState() {
+    public FileState getState() {
         return state;
     }
 

@@ -4,8 +4,6 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import main.java.controllers.MainScreenController;
 import org.apache.log4j.BasicConfigurator;
@@ -14,14 +12,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
-import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 @ComponentScan("main.java")
 @SpringBootApplication
 public class Main extends Application {
-
     private ConfigurableApplicationContext context;
     private Parent rootNode;
 
@@ -32,7 +28,6 @@ public class Main extends Application {
         BasicConfigurator.configure();
         context = SpringApplication.run(Main.class);
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../../resources/view/screen_main.fxml"));
-        //loader.setResources(ResourceBundle.getBundle("../../resources/bundles/Bundle", new Locale("en", "EN")));
         loader.setControllerFactory(context::getBean);
         rootNode = loader.load();
         mainScreenController = (MainScreenController) loader.getController();
@@ -56,7 +51,6 @@ public class Main extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setResources(ResourceBundle.getBundle("bundles.MyBundle", locale));
     }
-
 
     public static void main(String[] args) {
         launch(args);

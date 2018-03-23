@@ -2,8 +2,8 @@ package main.java.service;
 
 import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.ID3v23Tag;
-import com.mpatric.mp3agic.Mp3File;
 import main.java.domain.Mp3FileWrapper;
+import main.java.enums.Mp3FilePattern;
 import main.java.exceptions.FileNameBadFormatException;
 import main.java.util.Constants;
 import org.apache.log4j.Logger;
@@ -12,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 public class Mp3Service {
@@ -91,7 +90,7 @@ public class Mp3Service {
         return -1;
     }
 
-    private static String getArtistFromFileNameAndPattern(String fileName, Mp3FileWrapper.Mp3FilePattern pattern) throws FileNameBadFormatException {
+    private static String getArtistFromFileNameAndPattern(String fileName, Mp3FilePattern pattern) throws FileNameBadFormatException {
         switch (pattern) {
             case ARTIST_YEAR_TITLE:
             case ARTIST_TITLE:
@@ -115,7 +114,7 @@ public class Mp3Service {
         }
     }
 
-    private static String getYearFromFileNameAndPattern(String fileName, Mp3FileWrapper.Mp3FilePattern pattern) throws FileNameBadFormatException {
+    private static String getYearFromFileNameAndPattern(String fileName, Mp3FilePattern pattern) throws FileNameBadFormatException {
         switch (pattern) {
             case ARTIST_YEAR_TITLE:
                 int firstIndexOfDash = getIndexOf(fileName, 1, '-');
@@ -140,7 +139,7 @@ public class Mp3Service {
         }
     }
 
-    private static String getTitleFromFileNameAndPattern(String fileName, Mp3FileWrapper.Mp3FilePattern pattern) throws FileNameBadFormatException {
+    private static String getTitleFromFileNameAndPattern(String fileName, Mp3FilePattern pattern) throws FileNameBadFormatException {
         switch (pattern) {
             case ARTIST_YEAR_TITLE:
                 int secondIndexOfDash = getIndexOf(fileName, 2, '-');
