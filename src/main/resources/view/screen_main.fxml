@@ -113,9 +113,6 @@
                      </GridPane.margin>
                   </GridPane>
                   <BorderPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="5">
-                     <top>
-                        <Label fx:id="consoleLabel" text="Konzola:" BorderPane.alignment="CENTER_LEFT" />
-                     </top>
                      <padding>
                         <Insets bottom="5.0" left="15.0" right="5.0" />
                      </padding>
@@ -126,6 +123,24 @@
                            </content>
                         </ScrollPane>
                      </center>
+                     <top>
+                        <BorderPane prefHeight="14.0" prefWidth="343.0" BorderPane.alignment="CENTER">
+                           <left>
+                              <Label fx:id="consoleLabel" text="Label" BorderPane.alignment="CENTER" />
+                           </left>
+                           <right>
+                              <Button fx:id="clearConsoleButton" maxHeight="19.0" maxWidth="20.0" minHeight="19.0" minWidth="20.0" mnemonicParsing="false" onAction="#clearConsole" prefHeight="19.0" prefWidth="20.0" BorderPane.alignment="CENTER">
+                                 <graphic>
+                                    <ImageView fitHeight="18.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/Clear.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </right>
+                        </BorderPane>
+                     </top>
                   </BorderPane>
                   <Button fx:id="saveButton" contentDisplay="TOP" mnemonicParsing="false" onAction="#start" prefHeight="48.0" prefWidth="95.0" text="Pokreni" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                      <graphic>
@@ -179,7 +194,7 @@
                      <graphic>
                         <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/PlayPause.png" />
+                              <Image url="@../images/GenerateTags.png" />
                            </image>
                         </ImageView>
                      </graphic>

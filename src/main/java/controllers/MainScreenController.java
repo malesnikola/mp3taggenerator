@@ -91,6 +91,8 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
     private Button saveButton;
     @FXML
     private Button stopButton;
+    @FXML
+    private Button clearConsoleButton;
 
     // data table
     private ObservableList<Mp3Details> tableData;
@@ -167,6 +169,8 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
             val = resourceBundle.getString("button.save.text");
             saveButton.setText(new String(val.getBytes("ISO-8859-1"), "cp1250"));
             stopButton.setText(resourceBundle.getString("button.stop.text"));
+            val = resourceBundle.getString("button.clearconsole.tooltip");
+            clearConsoleButton.setTooltip(new Tooltip(new String(val.getBytes("ISO-8859-1"), "cp1250")));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -459,6 +463,10 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
     private void addFileToTable(Mp3FileWrapper file) {
         tableData.add(Mp3Details.deserialize(file));
         //tableView.sort();
+    }
+
+    public void clearConsole(){
+        infoArea.getChildren().clear();
     }
 
     @Override
