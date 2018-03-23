@@ -42,6 +42,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class MainScreenController implements Mp3Model.Mp3FilesObserver {
+
     private static Logger logger = Logger.getLogger(MainScreenController.class);
 
     @Autowired

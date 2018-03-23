@@ -5,7 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -19,6 +18,13 @@ public class AboutDialogController {
 
     private ResourceBundle resourceBundle;
     private Stage dialogStage;
+
+    @FXML
+    private Label appNameLabel;
+    @FXML
+    private Label appVersionLabel;
+    @FXML
+    private Label copyrightLabel;
 
     /**
      * Get localized string from Bundle_{chosenLanguage}.properties in charset cp1250 (because of Serbian latin letters).
@@ -35,6 +41,21 @@ public class AboutDialogController {
         }
     }
 
+    /**
+     * Populate UI element with localized strings from Bundle_{chosenLanguage}.properties.
+     */
+    private void populateUIWithLocalizedStrings() {
+        // labels
+        appNameLabel.setText(getLocalizedString("dialog.about.appname.text"));
+        appVersionLabel.setText(getLocalizedString("dialog.about.appversion.text"));
+        copyrightLabel.setText(getLocalizedString("dialog.about.copyright.text"));
+    }
+
+    @FXML
+    public void initialize() {
+        //populateUIWithLocalizedStrings();
+    }
+
     public AboutDialogController(ResourceBundle resourceBundle){
         this.resourceBundle = resourceBundle;
         dialogStage = new Stage();
@@ -45,6 +66,7 @@ public class AboutDialogController {
         try {
             Parent root = (Parent)loader.load();
             dialogStage.setScene(new Scene(root));
+            dialogStage.setResizable(false);
         } catch (IOException e) {
             e.printStackTrace();
         }
