@@ -119,7 +119,7 @@
                      <center>
                         <ScrollPane fx:id="scrollPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                            <content>
-                              <TextFlow fx:id="infoArea" />
+                              <TextFlow fx:id="consoleTextFlow" />
                            </content>
                         </ScrollPane>
                      </center>

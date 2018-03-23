@@ -117,7 +117,7 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
     @FXML
     private ScrollPane scrollPane;
     @FXML
-    private TextFlow infoArea;
+    private TextFlow consoleTextFlow;
 
     // progress bar
     @FXML
@@ -371,6 +371,90 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
     }
 
     /**
+     * Clear console.
+     */
+    public void clearConsole(){
+        consoleTextFlow.getChildren().clear();
+    }
+
+    /**
+     * Add localized error message on console.
+     * @param currentTime String which represent current date time.
+     * @param key Key of the required localized string.
+     * @param failedFiles List of failed files with details.
+     */
+    private void addErrorsOnConsole(String currentTime, String key, List<FailedFileDetails> failedFiles) {
+        Text importErrorText = new Text();
+        importErrorText.setText(currentTime + getLocalizedString(key) + "\n");
+        importErrorText.setFill(Color.RED);
+        consoleTextFlow.getChildren().addAll(importErrorText);
+
+        for (FailedFileDetails failedFileDetails : failedFiles) {
+            Text fileErrorText = new Text("\t\t " + failedFileDetails.getFilePath() + " (" + failedFileDetails.getErrorMessage() + ")\n");
+            fileErrorText.setFill(Color.RED);
+            consoleTextFlow.getChildren().addAll(fileErrorText);
+        }
+    }
+
+    /**
+     * Add localized info on console based on previous user action.
+     */
+    private void addInfoOnConsole(){
+        // get current time
+        Calendar rightNowCalendar = Calendar.getInstance();
+        int hours = rightNowCalendar.get(Calendar.HOUR_OF_DAY);
+        int minutes = rightNowCalendar.get(Calendar.MINUTE);
+        int seconds = rightNowCalendar.get(Calendar.SECOND);
+        String currentTime = ((hours < 10) ? ("0" + hours) : hours) + ":"
+                + ((minutes < 10) ? ("0" + minutes) : minutes) + ":"
+                + ((seconds < 10) ? ("0" + seconds) : seconds) + " - ";
+
+        Mp3Model.Mp3ModelState modelLastState = mp3Model.getLastModelState();
+        switch (modelLastState) {
+            case IMPORTED:
+                if (mp3Model.getLastFailedLoadingFiles().size() > 0) {
+                    addErrorsOnConsole(currentTime,"files.cannot.be.imported", mp3Model.getLastFailedLoadingFiles());
+                } else {
+                    Text importFilesSuccessText = new Text(currentTime + getLocalizedString("files.imported.successfully") + "\n");
+                    importFilesSuccessText.setFill(Color.BLUE);
+                    consoleTextFlow.getChildren().addAll(importFilesSuccessText);
+                }
+
+                break;
+            case REMOVED:
+                Text removedFilesSuccessText = new Text(currentTime + getLocalizedString("files.removed.successfully") + "\n");
+                removedFilesSuccessText.setFill(Color.ORANGE);
+                consoleTextFlow.getChildren().addAll(removedFilesSuccessText);
+
+                break;
+            case GENRATED:
+                if (mp3Model.getLastFailedGeneratingTags().size() > 0) {
+                    addErrorsOnConsole(currentTime,"files.cannot.be.generated", mp3Model.getLastFailedGeneratingTags());
+                } else {
+                    Text importFilesSuccessText = new Text(currentTime + getLocalizedString("files.generated.successfully") + "\n");
+                    importFilesSuccessText.setFill(Color.PURPLE);
+                    consoleTextFlow.getChildren().addAll(importFilesSuccessText);
+                }
+
+                break;
+            case SAVED:
+                if (mp3Model.getLastFailedSavingFiles().size() > 0) {
+                    addErrorsOnConsole(currentTime,"files.cannot.be.saved", mp3Model.getLastFailedSavingFiles());
+                } else {
+                    Text importFilesSuccessText = new Text(currentTime + getLocalizedString("files.saved.successfully") + "\n");
+                    importFilesSuccessText.setFill(Color.GREEN);
+                    consoleTextFlow.getChildren().addAll(importFilesSuccessText);
+                }
+
+                break;
+            default:
+                break;
+        }
+
+        scrollPane.setVvalue(1.0); // 1.0 means 100% at the bottom
+    }
+
+    /**
      * Open file chooser dialog and import selected files into mp3Model.
      */
     public void openFiles() {
@@ -490,118 +574,16 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
         tableView.setItems(null);
         tableView.setItems(tableData);
 
+        // sort table
         tableView.getSortOrder().add(chosenSortingColumn);
         tableView.sort();
-    }
-
-    private void addFileToTable(Mp3FileWrapper file) {
-        tableData.add(Mp3Details.deserialize(file));
-        //tableView.sort();
-    }
-
-    public void clearConsole(){
-        infoArea.getChildren().clear();
-    }
-
-    @Override
-    public void onImportedFileChanged(Mp3FileWrapper file) {
-        Platform.runLater ( () -> {
-            /*long startTime = System.currentTimeMillis();*/
-            addFileToTable(file);
-            /*long spendTime = System.currentTimeMillis() - startTime;
-            if (spendTime > longerTime) {
-                longerTime = spendTime;
-                System.out.println("MAXTIME = " + longerTime);
-            }*/
-        });
-    }
-
-    private void updateErrorsOnInfoArea(String errorMessage, List<FailedFileDetails> failedFiles) {
-        Text importErrorText = new Text();
-        importErrorText.setText(errorMessage);
-        importErrorText.setFill(Color.RED);
-        infoArea.getChildren().addAll(importErrorText);
-
-        for (FailedFileDetails failedFileDetails : failedFiles) {
-            Text fileErrorText = new Text("\t\t " + failedFileDetails.getFilePath() + " (" + failedFileDetails.getErrorMessage() + ")\n");
-            fileErrorText.setFill(Color.RED);
-            infoArea.getChildren().addAll(fileErrorText);
-        }
-    }
-
-    private void updateInfoArea(){
-        Calendar rightNowCalendar = Calendar.getInstance();
-        int hours = rightNowCalendar.get(Calendar.HOUR_OF_DAY);
-        int minutes = rightNowCalendar.get(Calendar.MINUTE);
-        int seconds = rightNowCalendar.get(Calendar.SECOND);
-        String dateString = ((hours < 10) ? ("0" + hours) : hours) + ":"
-                + ((minutes < 10) ? ("0" + minutes) : minutes) + ":"
-                + ((seconds < 10) ? ("0" + seconds) : seconds) + " - ";
-
-        Mp3Model.Mp3ModelState modelLastState = mp3Model.getLastModelState();
-        switch (modelLastState) {
-            case IMPORTED:
-                if (mp3Model.getLastFailedLoadingFiles().size() > 0) {
-                    updateErrorsOnInfoArea(dateString + "This files cannot be imported:\n", mp3Model.getLastFailedLoadingFiles());
-                } else {
-                    Text importFilesSuccessText = new Text(dateString + "Files imported successfully.\n");
-                    importFilesSuccessText.setFill(Color.BLUE);
-                    infoArea.getChildren().addAll(importFilesSuccessText);
-                }
-
-                break;
-            case REMOVED:
-                Text removedFilesSuccessText = new Text(dateString + "Files removed successfully.\n");
-                removedFilesSuccessText.setFill(Color.ORANGE);
-                infoArea.getChildren().addAll(removedFilesSuccessText);
-
-                break;
-            case GENRATED:
-                if (mp3Model.getLastFailedGeneratingTags().size() > 0) {
-                    updateErrorsOnInfoArea(dateString + "This files cannot be generated:\n", mp3Model.getLastFailedGeneratingTags());
-                } else {
-                    Text importFilesSuccessText = new Text(dateString + "Files generated successfully.\n");
-                    importFilesSuccessText.setFill(Color.PURPLE);
-                    infoArea.getChildren().addAll(importFilesSuccessText);
-                }
-
-                break;
-            case SAVED:
-                if (mp3Model.getLastFailedSavingFiles().size() > 0) {
-                    updateErrorsOnInfoArea(dateString + "This files cannot be saved:\n", mp3Model.getLastFailedSavingFiles());
-                } else {
-                    Text importFilesSuccessText = new Text(dateString + "Files saved successfully.\n");
-                    importFilesSuccessText.setFill(Color.GREEN);
-                    infoArea.getChildren().addAll(importFilesSuccessText);
-                }
-
-                break;
-            default:
-                break;
-        }
-
-        scrollPane.setVvalue(1.0); //1.0 means 100% at the bottom
     }
 
     @Override
     public void onImportedFilesChanged() {
         Platform.runLater(() -> {
             updateTable();
-            updateInfoArea();
-        });
-    }
-
-    @Override
-    public void onSavedImportedFiles() {
-        Platform.runLater(() -> {
-            updateTable();
-            updateInfoArea();
-            progressBar.progressProperty().unbind();
-            progressBar.setProgress(0);
-            generateButton.setDisable(false);
-            saveButton.setDisable(false);
-            stopButton.setDisable(true);
-            saveFilesWorker = null;
+            addInfoOnConsole();
         });
     }
 
@@ -609,7 +591,25 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
     public void onTagGenerated() {
         Platform.runLater(() -> {
             updateTable();
-            updateInfoArea();
+            addInfoOnConsole();
         });
     }
+
+    @Override
+    public void onSavedImportedFiles() {
+        Platform.runLater(() -> {
+            updateTable();
+            addInfoOnConsole();
+
+            // reset progressBar
+            progressBar.progressProperty().unbind();
+            progressBar.setProgress(0);
+            generateButton.setDisable(false);
+
+            saveButton.setDisable(false);
+            stopButton.setDisable(true);
+            saveFilesWorker = null;
+        });
+    }
+
 }

@@ -62,22 +62,22 @@ public class Mp3Model {
         return lastModelState;
     }
 
-    public void importFile(File file){
-        String filePath = file.getPath();
-        if (!importedFiles.containsKey(filePath)) {
-            try {
-                Mp3FileWrapper newFile = new Mp3FileWrapper(filePath);
-                importedFiles.put(filePath, newFile);
-                observers.forEach(o -> o.onImportedFileChanged(newFile));
-            } catch (IOException | UnsupportedTagException | InvalidDataException e) {
-                logger.debug("Excepton in method importFiles: " + e.getMessage());
-                lastFailedLoadingFiles.add(new FailedFileDetails(filePath, e.getMessage()));
-            } catch (Exception e) {
-                logger.debug("Unexpected excepton in method importFiles: " + e.getMessage());
-                lastFailedLoadingFiles.add(new FailedFileDetails(filePath, "Unexpected excepton: " + e.getMessage()));
-            }
-        }
-    }
+//    public void importFile(File file){
+//        String filePath = file.getPath();
+//        if (!importedFiles.containsKey(filePath)) {
+//            try {
+//                Mp3FileWrapper newFile = new Mp3FileWrapper(filePath);
+//                importedFiles.put(filePath, newFile);
+//                observers.forEach(o -> o.onImportedFileChanged(newFile));
+//            } catch (IOException | UnsupportedTagException | InvalidDataException e) {
+//                logger.debug("Excepton in method importFiles: " + e.getMessage());
+//                lastFailedLoadingFiles.add(new FailedFileDetails(filePath, e.getMessage()));
+//            } catch (Exception e) {
+//                logger.debug("Unexpected excepton in method importFiles: " + e.getMessage());
+//                lastFailedLoadingFiles.add(new FailedFileDetails(filePath, "Unexpected excepton: " + e.getMessage()));
+//            }
+//        }
+//    }
 
     public void importFiles(List<File> files) {
         importFiles(files, null);
@@ -244,8 +244,6 @@ public class Mp3Model {
     }
 
     public interface Mp3FilesObserver {
-        void onImportedFileChanged(Mp3FileWrapper mp3File);
-
         void onImportedFilesChanged();
 
         void onSavedImportedFiles();
