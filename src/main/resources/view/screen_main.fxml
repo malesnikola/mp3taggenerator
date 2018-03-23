@@ -22,9 +22,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.TextFlow?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="653.0" prefWidth="943.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controllers.MainScreenController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="653.0" prefWidth="1130.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controllers.MainScreenController">
    <top>
-      <MenuBar BorderPane.alignment="CENTER">
+      <MenuBar prefWidth="966.0" BorderPane.alignment="CENTER">
         <menus>
           <Menu fx:id="fileMenu" mnemonicParsing="false" text="File">
             <items>
@@ -126,7 +126,7 @@
                      <top>
                         <BorderPane prefHeight="14.0" prefWidth="343.0" BorderPane.alignment="CENTER">
                            <left>
-                              <Label fx:id="consoleLabel" text="Label" BorderPane.alignment="CENTER" />
+                              <Label fx:id="consoleLabel" text="Konzola" BorderPane.alignment="CENTER" />
                            </left>
                            <right>
                               <Button fx:id="clearConsoleButton" maxHeight="19.0" maxWidth="20.0" minHeight="19.0" minWidth="20.0" mnemonicParsing="false" onAction="#clearConsole" prefHeight="19.0" prefWidth="20.0" BorderPane.alignment="CENTER">
@@ -203,9 +203,9 @@
             </GridPane>
             <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
               <columns>
-                <TableColumn fx:id="fileName" editable="false" prefWidth="200.0" text="Naziv fajla" />
-                <TableColumn fx:id="trackArtist" editable="false" prefWidth="200.0" text="Autor" />
-                  <TableColumn fx:id="trackName" editable="false" prefWidth="200.0" text="Naziv pesme" />
+                <TableColumn fx:id="fileName" editable="false" prefWidth="373.99998474121094" text="Naziv fajla" />
+                <TableColumn fx:id="trackArtist" editable="false" prefWidth="221.0" text="Autor" />
+                  <TableColumn fx:id="trackName" editable="false" prefWidth="231.0" text="Naziv pesme" />
                   <TableColumn fx:id="trackYear" editable="false" prefWidth="100.0" style="-fx-alignment: CENTER;" text="Godina izdanja" />
               </columns>
                <opaqueInsets>
