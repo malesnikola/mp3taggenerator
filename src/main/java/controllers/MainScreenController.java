@@ -42,7 +42,6 @@ import java.util.stream.Collectors;
 
 @Component
 public class MainScreenController implements Mp3Model.Mp3FilesObserver {
-
     private static Logger logger = Logger.getLogger(MainScreenController.class);
 
     @Autowired
@@ -59,6 +58,8 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
     private Menu fileMenu;
     @FXML
     private Menu languageMenu;
+    @FXML
+    private Menu helpMenu;
 
     // menu items
     @FXML
@@ -69,6 +70,8 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
     private CheckMenuItem englishMenuItem;
     @FXML
     private CheckMenuItem serbianMenuItem;
+    @FXML
+    private MenuItem aboutMenuItem;
 
     // labels
     @FXML
@@ -149,12 +152,14 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
         // menu
         fileMenu.setText(getLocalizedString("menu.file.text"));
         languageMenu.setText(getLocalizedString("menu.language.text"));
+        helpMenu.setText(getLocalizedString("menu.help.text"));
 
         // menu items
         openFilesMenuItem.setText(getLocalizedString("menu.item.openfiles.text"));
         openFolderMenuItem.setText(getLocalizedString("menu.item.openfolder.text"));
         englishMenuItem.setText(getLocalizedString("menu.item.english.text"));
         serbianMenuItem.setText(getLocalizedString("menu.item.serbian.text"));
+        aboutMenuItem.setText(getLocalizedString("menu.item.about.text"));
 
         // labels
         chooseAlphabetLabel.setText(getLocalizedString("label.choosealphabet.text"));
@@ -373,6 +378,11 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
         }
 
         serbianMenuItem.setSelected(true);
+    }
+
+    public void openAboutDialog() {
+        AboutDialogController aboutDialogController = new AboutDialogController(resourceBundle);
+        aboutDialogController.getStage().show();
     }
 
     /**

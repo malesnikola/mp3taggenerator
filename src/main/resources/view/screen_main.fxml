@@ -38,6 +38,11 @@
                   <CheckMenuItem fx:id="serbianMenuItem" mnemonicParsing="false" onAction="#serbianMenuItemCheckChanged" text="Serbian" />
                </items>
           </Menu>
+            <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
+              <items>
+                <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" onAction="#openAboutDialog" text="About" />
+              </items>
+            </Menu>
         </menus>
       </MenuBar>
    </top>

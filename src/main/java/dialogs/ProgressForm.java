@@ -17,7 +17,7 @@ import javafx.stage.WindowEvent;
  */
 public class ProgressForm {
     private final Scene parentScene;
-    private final Stage dialogStage;
+    private Stage dialogStage;
 
     private final ProgressIndicator progressIndicator = new ProgressIndicator();
     private Task<?> task;
