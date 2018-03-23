@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import main.java.controllers.MainScreenController;
 import org.apache.log4j.BasicConfigurator;
@@ -12,6 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
+import java.io.File;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -35,7 +37,13 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+        // set title for app
         primaryStage.setTitle("MP3 Tag Generator");
+        // set image for app
+        String rootPath = System.getProperty("user.dir");
+        String imagePath = "file:///" + rootPath + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "images" + File.separator + "Mp3TagGenerator.png";
+        primaryStage.getIcons().add(new Image(imagePath));
+        // create scene
         Scene scene = new Scene(rootNode);
         mainScreenController.setScene(scene);
         primaryStage.setScene(scene);
