@@ -64,7 +64,7 @@ public class AboutDialogController {
         dialogStage.initModality(Modality.APPLICATION_MODAL);
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/dialog_about.fxml"));
         try {
-            Parent root = (Parent)loader.load();
+            Parent root = loader.load();
             dialogStage.setScene(new Scene(root));
             dialogStage.setResizable(false);
         } catch (IOException e) {

@@ -32,20 +32,16 @@ import main.java.workers.GenerateTagsWorker;
 import main.java.workers.ImportFilesWorker;
 import main.java.workers.SaveFilesWorker;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import javafx.scene.control.TableColumn;
 
 import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-//@Component
 public class MainScreenController implements Mp3Model.Mp3FilesObserver {
 
     private static Logger logger = Logger.getLogger(MainScreenController.class);
 
-    //@Autowired
     private Mp3Model mp3Model;
 
     private Scene scene;

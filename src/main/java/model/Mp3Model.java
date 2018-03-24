@@ -12,7 +12,6 @@ import main.java.workers.GenerateTagsWorker;
 import main.java.workers.ImportFilesWorker;
 import main.java.workers.SaveFilesWorker;
 import org.apache.log4j.Logger;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.Nullable;
 import java.io.File;
@@ -21,7 +20,9 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-//@Component
+/**
+ * Singleton class which represent model for all imported ".mp3" files.
+ */
 public class Mp3Model {
     private static Logger logger = Logger.getLogger(Mp3Model.class);
 
