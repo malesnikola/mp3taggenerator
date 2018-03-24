@@ -7,7 +7,9 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -15,8 +17,7 @@ import javafx.scene.input.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
+import javafx.stage.*;
 import javafx.util.Callback;
 import main.java.dialogs.ProgressForm;
 import main.java.domain.FailedFileDetails;
@@ -46,7 +47,7 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
 
     private Scene scene;
     private String chosenLanguage; // en (English), rs (Serbian)
-    private ResourceBundle resourceBundle;
+    private static ResourceBundle resourceBundle;
     private Task saveFilesWorker;
     private TableColumn chosenSortingColumn;
 
@@ -126,6 +127,14 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
     // progress bar
     @FXML
     private ProgressBar progressBar;
+
+    /**
+     * Get resource bundle of application.
+     * @return Returns chosen ResourceBundle.
+     */
+    public static ResourceBundle getResourceBundle(){
+        return resourceBundle;
+    }
 
     /**
      * Get localized string from Bundle_{chosenLanguage}.properties in charset cp1250 (because of Serbian latin letters).
@@ -379,8 +388,19 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
     }
 
     public void openAboutDialog() {
-        AboutDialogController aboutDialogController = new AboutDialogController(resourceBundle);
-        aboutDialogController.getStage().show();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/dialog_about.fxml"));
+        try {
+            Parent rootNode = loader.load();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(rootNode));
+            stage.setTitle(getLocalizedString("dialog.about.title"));
+            stage.initStyle(StageStyle.UTILITY);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

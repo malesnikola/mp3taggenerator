@@ -18,7 +18,7 @@ public class Main extends Application {
     MainScreenController mainScreenController;
 
     @Override
-    public void init() throws Exception {
+    public void init() throws Exception{
         BasicConfigurator.configure();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/screen_main.fxml"));
         rootNode = loader.load();

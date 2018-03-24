@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import main.java.util.Constants;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -47,30 +48,31 @@ public class AboutDialogController {
     private void populateUIWithLocalizedStrings() {
         // labels
         appNameLabel.setText(getLocalizedString("dialog.about.appname.text"));
-        appVersionLabel.setText(getLocalizedString("dialog.about.appversion.text"));
+        appVersionLabel.setText(getLocalizedString("dialog.about.appversion.text") + " " + Constants.APP_VERSION);
         copyrightLabel.setText(getLocalizedString("dialog.about.copyright.text"));
     }
 
     @FXML
     public void initialize() {
-        //populateUIWithLocalizedStrings();
+        resourceBundle = MainScreenController.getResourceBundle();
+        populateUIWithLocalizedStrings();
     }
 
-    public AboutDialogController(ResourceBundle resourceBundle){
-        this.resourceBundle = resourceBundle;
-        dialogStage = new Stage();
-        dialogStage.setTitle(getLocalizedString("dialog.about.title"));
-        dialogStage.initStyle(StageStyle.UTILITY);
-        dialogStage.initModality(Modality.APPLICATION_MODAL);
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/dialog_about.fxml"));
-        try {
-            Parent root = loader.load();
-            dialogStage.setScene(new Scene(root));
-            dialogStage.setResizable(false);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    public AboutDialogController(ResourceBundle resourceBundle){
+//        this.resourceBundle = resourceBundle;
+////        dialogStage = new Stage();
+////        dialogStage.setTitle(getLocalizedString("dialog.about.title"));
+////        dialogStage.initStyle(StageStyle.UTILITY);
+////        dialogStage.initModality(Modality.APPLICATION_MODAL);
+////        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/dialog_about.fxml"));
+////        try {
+////            Parent root = loader.load();
+////            dialogStage.setScene(new Scene(root));
+////            dialogStage.setResizable(false);
+////        } catch (IOException e) {
+////            e.printStackTrace();
+////        }
+//    }
 
     public Stage getStage() {
         return dialogStage;

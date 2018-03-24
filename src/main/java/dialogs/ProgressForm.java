@@ -24,21 +24,20 @@ public class ProgressForm {
 
     /**
      * Create new progress form
-     * @param parentStage Parent stage where progress form is called.
+     * @param parentScene Parent stage where progress form is called.
      */
-    public ProgressForm(Scene parentStage) {
-        this.parentScene = parentStage;
+    public ProgressForm(Scene parentScene) {
+        this.parentScene = parentScene;
         dialogStage = new Stage();
-        dialogStage.initStyle(StageStyle.UTILITY);
-        dialogStage.setResizable(false);
+        dialogStage.initStyle(StageStyle.TRANSPARENT);
         dialogStage.initModality(Modality.APPLICATION_MODAL);
+        dialogStage.setResizable(false);
 
         // reset progress
         progressIndicator.setProgress(-1F);
 
         Scene scene = new Scene(progressIndicator);
         dialogStage.setScene(scene);
-        dialogStage.initStyle(StageStyle.TRANSPARENT);
 
         // add key event handling to enable user to cancel task and close form
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
