@@ -21,9 +21,14 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Component
+//@Component
 public class Mp3Model {
     private static Logger logger = Logger.getLogger(Mp3Model.class);
+
+    /**
+     * Singleton instance.
+     */
+    private static Mp3Model mp3ModelInstance;
 
     /**
      * Last model state represent last executed action (e.g. "saved" for saving).
@@ -54,6 +59,14 @@ public class Mp3Model {
      * Contains set of registered observers.
      */
     private Set<Mp3FilesObserver> observers = new HashSet<>();
+
+    public static Mp3Model getInstance() {
+        if (mp3ModelInstance == null) {
+            mp3ModelInstance = new Mp3Model();
+        }
+
+        return mp3ModelInstance;
+    }
 
     /**
      * Get all imported files.

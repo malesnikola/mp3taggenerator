@@ -62,7 +62,7 @@ public class AboutDialogController {
         dialogStage.setTitle(getLocalizedString("dialog.about.title"));
         dialogStage.initStyle(StageStyle.UTILITY);
         dialogStage.initModality(Modality.APPLICATION_MODAL);
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("../../resources/view/dialog_about.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/dialog_about.fxml"));
         try {
             Parent root = (Parent)loader.load();
             dialogStage.setScene(new Scene(root));

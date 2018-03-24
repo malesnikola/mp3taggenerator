@@ -40,12 +40,12 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Component
+//@Component
 public class MainScreenController implements Mp3Model.Mp3FilesObserver {
 
     private static Logger logger = Logger.getLogger(MainScreenController.class);
 
-    @Autowired
+    //@Autowired
     private Mp3Model mp3Model;
 
     private Scene scene;
@@ -191,10 +191,11 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
 
     @FXML
     public void initialize() {
+        mp3Model = Mp3Model.getInstance();
         mp3Model.registerObserver(this);
 
         // by default, languague is English
-        resourceBundle = ResourceBundle.getBundle("main.resources.bundles.Bundle", new Locale("en", "EN"));
+        resourceBundle = ResourceBundle.getBundle("bundles.Bundle", new Locale("en", "EN"));
         chosenLanguage = "en";
         englishMenuItem.setSelected(true);
 
@@ -357,7 +358,7 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
      */
     public void englishMenuItemCheckChanged(ActionEvent e){
         if (!"en".equals(chosenLanguage)) {
-            resourceBundle = ResourceBundle.getBundle("main.resources.bundles.Bundle", new Locale("en", "EN"));
+            resourceBundle = ResourceBundle.getBundle("bundles.Bundle", new Locale("en", "EN"));
             chosenLanguage = "en";
             serbianMenuItem.setSelected(false);
             populateUIWithLocalizedStrings();
@@ -372,7 +373,7 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
      */
     public void serbianMenuItemCheckChanged(ActionEvent e){
         if (!"rs".equals(chosenLanguage)) {
-            resourceBundle = ResourceBundle.getBundle("main.resources.bundles.Bundle", new Locale("rs", "RS"));
+            resourceBundle = ResourceBundle.getBundle("bundles.Bundle", new Locale("rs", "RS"));
             chosenLanguage = "rs";
             englishMenuItem.setSelected(false);
             populateUIWithLocalizedStrings();
