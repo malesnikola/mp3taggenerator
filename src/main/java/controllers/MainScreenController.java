@@ -40,14 +40,15 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class MainScreenController implements Mp3Model.Mp3FilesObserver {
-
     private static Logger logger = Logger.getLogger(MainScreenController.class);
+
+    private static ResourceBundle resourceBundle;
 
     private Mp3Model mp3Model;
 
     private Scene scene;
     private String chosenLanguage; // en (English), rs (Serbian)
-    private static ResourceBundle resourceBundle;
+
     private Task saveFilesWorker;
     private TableColumn chosenSortingColumn;
 
@@ -387,6 +388,9 @@ public class MainScreenController implements Mp3Model.Mp3FilesObserver {
         serbianMenuItem.setSelected(true);
     }
 
+    /**
+     * Open about dialog with basic information of software.
+     */
     public void openAboutDialog() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/dialog_about.fxml"));
         try {

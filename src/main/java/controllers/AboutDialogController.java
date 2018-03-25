@@ -18,7 +18,6 @@ public class AboutDialogController {
     private static Logger logger = Logger.getLogger(MainScreenController.class);
 
     private ResourceBundle resourceBundle;
-    private Stage dialogStage;
 
     @FXML
     private Label appNameLabel;
@@ -58,23 +57,4 @@ public class AboutDialogController {
         populateUIWithLocalizedStrings();
     }
 
-//    public AboutDialogController(ResourceBundle resourceBundle){
-//        this.resourceBundle = resourceBundle;
-////        dialogStage = new Stage();
-////        dialogStage.setTitle(getLocalizedString("dialog.about.title"));
-////        dialogStage.initStyle(StageStyle.UTILITY);
-////        dialogStage.initModality(Modality.APPLICATION_MODAL);
-////        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/dialog_about.fxml"));
-////        try {
-////            Parent root = loader.load();
-////            dialogStage.setScene(new Scene(root));
-////            dialogStage.setResizable(false);
-////        } catch (IOException e) {
-////            e.printStackTrace();
-////        }
-//    }
-
-    public Stage getStage() {
-        return dialogStage;
-    }
 }
